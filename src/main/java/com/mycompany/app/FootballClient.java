@@ -11,12 +11,12 @@ public class FootballClient {
 
     public String fetchFixtures() {
         RestClient footballClient = RestClient.builder()
-            .baseUrl("https://v3.football.api-sports.io")
-            .defaultHeader("x-apisports-key", footballApi)
+            .baseUrl("https://api.football-data.org/v4")
+            .defaultHeader("X-Auth-Token", footballApi)
             .build();
         
         String jsonResponse = footballClient.get()
-        .uri("/fixtures?next=5&team=137")
+        .uri("/teams/86/matches")
         .retrieve()
         .body(String.class);
 

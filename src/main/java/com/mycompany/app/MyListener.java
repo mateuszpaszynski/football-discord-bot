@@ -31,7 +31,8 @@ public class MyListener extends ListenerAdapter {
         if (content.equals("!fixtures")) {
             MessageChannel channel = event.getChannel();
             String fixtures = footballClient.fetchFixtures();
-            channel.sendMessage("Next 5 Real Madrid fixtures" + fixtures).queue();
+            System.out.println(fixtures);
+            channel.sendMessage("Next 5 Real Madrid fixtures").queue();
         }
         
     }
