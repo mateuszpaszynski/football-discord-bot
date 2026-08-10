@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package com.mycompany.app.discord;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

@@ -1,6 +1,6 @@
-package com.mycompany.app;
+package com.mycompany.app.discord;
 
-import com.mycompany.app.FootballClient;
+import com.mycompany.app.client.FootballClient;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
@@ -31,8 +31,7 @@ public class MyListener extends ListenerAdapter {
         if (content.equals("!fixtures")) {
             MessageChannel channel = event.getChannel();
             String fixtures = footballClient.fetchFixtures();
-            System.out.println(fixtures);
-            channel.sendMessage("Next 5 Real Madrid fixtures").queue();
+            channel.sendMessage(fixtures).queue();
         }
         
     }
