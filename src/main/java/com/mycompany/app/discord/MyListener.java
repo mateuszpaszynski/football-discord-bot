@@ -30,8 +30,18 @@ public class MyListener extends ListenerAdapter {
         }
         if (content.equals("!fixtures")) {
             MessageChannel channel = event.getChannel();
-            String fixtures = footballClient.fetchFixtures();
-            channel.sendMessage(fixtures).queue();
+    
+            channel.sendMessage("Saved some matches").queue();
+        }
+        if (content.equals("!teams")) {
+            MessageChannel channel = event.getChannel();
+            String teams = footballClient.fetchTeams();
+            channel.sendMessage(teams).queue();
+        }
+        if (content.equals("!competitions")) {
+            MessageChannel channel = event.getChannel();
+            footballClient.fetchCompetitions();
+            channel.sendMessage("Saved some competitions").queue();
         }
         
     }

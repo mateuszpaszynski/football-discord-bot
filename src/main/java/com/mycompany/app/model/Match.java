@@ -19,7 +19,7 @@ public class Match {
     private Team homeTeam;
 
     @ManyToOne
-    @JoinColumn(name = "home_team_id")
+    @JoinColumn(name = "away_team_id")
     private Team awayTeam;
 
     private String score;
