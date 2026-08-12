@@ -12,6 +12,8 @@ public class Competition {
 
     private String type;
 
+    private String country;
+
     public Long getId() {
         return this.id;
     }
@@ -31,12 +33,19 @@ public class Competition {
     public void setType(String type) {
         this.type = type;
     }
+    public String getCountry() {
+        return this.country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
+    }
     public Competition() {
 
     }
-    public Competition(Long id, String name, String type) {
+    public Competition(Long id, String name, String type, String country) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.country = country;
     }
 }

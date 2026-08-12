@@ -43,7 +43,6 @@ public class FootballClient {
             .body(JsonNode.class);
         
         JsonNode matchesNode = rootNode.get("matches");
-        int savedCount = 0;
 
         for (JsonNode matchJson : matchesNode) {
         
@@ -68,22 +67,40 @@ public class FootballClient {
             Match match = new Match(matchId, 2014L, utcDate, status, homeTeam, awayTeam, "TBD");
 
             matchRepository.save(match);
-            savedCount++;
         }
         
     }
-    
-    public String fetchTeams() {
-        List<Team> allTeams = teamRepository.findAll();
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Teams from LaLiga: \n");
+    public void fetchTeams() {
+        RestClient footballClient = RestClient.builder()
+        .baseUrl(BASE_URL)
+        .defaultHeader(HEADER,footballApi)
+        .build();
+        
+        List<Competition> allComps = competitionRepository.findAll();
+        for (Competition comp : allComps) {
+            Long compId = comp.getId();
 
-        for (Team team : allTeams) {
-            sb.append(team.getName());
-            sb.append("\n");
+            String uri = "/v4/competitions/" + compId.toString() + "/teams";
+            JsonNode rootNode = footballClient.get()
+            .uri(uri)
+            .retrieve()
+            .body(JsonNode.class);
+            
+            JsonNode teamsNode = rootNode.get("teams");
+
+            for (JsonNode teamNode : teamsNode) {
+                Long teamId = teamNode.get("id").asLong();
+                String name = teamNode.get("name").asText();
+                Team team = new Team(teamId,name);
+                teamRepository.save(team);
+            }
+
         }
-        return sb.toString();
+    }
+    public List<Team> getTeams() {
+        List<Team> allTeams = teamRepository.findAll();
+        return allTeams;
     }
     public void fetchCompetitions() {
         RestClient footballClient = RestClient.builder()
@@ -102,10 +119,14 @@ public class FootballClient {
             Long competitionId = competition.get("id").asLong();
             String name = competition.get("name").asText();
             String type = competition.get("type").asText();
-            
-            Competition comp = new Competition(competitionId,name,type);
+            JsonNode area = competition.get("area");
+            String country = area.get("name").asText();
+            Competition comp = new Competition(competitionId,name,type,country);
             competitionRepository.save(comp);
         }
-        System.out.println("Success");
+    }
+    public List<Competition> getCompetitions() {
+        List<Competition> allComps = competitionRepository.findAll();
+        return allComps;
     }
 }
