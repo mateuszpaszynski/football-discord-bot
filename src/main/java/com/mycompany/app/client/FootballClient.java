@@ -37,38 +37,63 @@ public class FootballClient {
             .defaultHeader(HEADER, footballApi)
             .build();
         
-        JsonNode rootNode = footballClient.get()
-            .uri("/v4/teams/86/matches?status=SCHEDULED")
-            .retrieve()
-            .body(JsonNode.class);
-        
-        JsonNode matchesNode = rootNode.get("matches");
+            List<Team> allTeams = teamRepository.findAll();
 
-        for (JsonNode matchJson : matchesNode) {
-        
-            JsonNode homeTeamNode = matchJson.get("homeTeam");
-            Long homeTeamId = homeTeamNode.get("id").asLong();
-            String homeTeamName = homeTeamNode.get("shortName").asText();
+            for (Team team : allTeams) {
 
-            Team homeTeam = teamRepository.findById(homeTeamId)
-                .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName)));
+                Long teamId = team.getId();
+                
+                try {
+                    String URI = "/v4/teams/" + teamId.toString() + "/matches?status=SCHEDULED";
+                
+                    JsonNode rootNode = footballClient.get()
+                    .uri(URI)
+                    .retrieve()
+                    .body(JsonNode.class);
+                    
+                    JsonNode matchesNode = rootNode.get("matches");
 
-            JsonNode awayTeamNode = matchJson.get("awayTeam");
-            Long awayTeamId = awayTeamNode.get("id").asLong();
-            String awayTeamName = awayTeamNode.get("shortName").asText();
-            
-            Team awayTeam = teamRepository.findById(awayTeamId)
-                .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName)));
+                    for (JsonNode matchJson : matchesNode) {
+                    
+                        JsonNode homeTeamNode = matchJson.get("homeTeam");
+                        Long homeTeamId = homeTeamNode.get("id").asLong();
+                        String homeTeamName = homeTeamNode.get("shortName").asText();
 
-            Long matchId = matchJson.get("id").asLong();
-            String utcDate = matchJson.get("utcDate").asText();
-            String status = matchJson.get("status").asText();
-            
-            Match match = new Match(matchId, 2014L, utcDate, status, homeTeam, awayTeam, "TBD");
+                        Team homeTeam = teamRepository.findById(homeTeamId)
+                            .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName)));
 
-            matchRepository.save(match);
-        }
-        
+                        JsonNode awayTeamNode = matchJson.get("awayTeam");
+                        Long awayTeamId = awayTeamNode.get("id").asLong();
+                        String awayTeamName = awayTeamNode.get("shortName").asText();
+                        
+                        Team awayTeam = teamRepository.findById(awayTeamId)
+                            .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName)));
+
+                        Long matchId = matchJson.get("id").asLong();
+                        String utcDate = matchJson.get("utcDate").asText();
+                        String status = matchJson.get("status").asText();
+                        
+                        Match match = new Match(matchId, 2014L, utcDate, status, homeTeam, awayTeam, "TBD");
+
+                        matchRepository.save(match);
+                    }
+                }
+                
+                catch (Exception e) {
+                    System.err.println("Error with fetching matches for team " + teamId + " cause " + e.getMessage());
+                }
+                System.out.println("Saved matches. 6.5 seconds of sleep for obeying rate limiting");
+                try {
+                    Thread.sleep(6500); 
+                } catch (InterruptedException e) {
+                    
+                    Thread.currentThread().interrupt();    
+                }
+            }
+    }
+    public List<Match> getMatches() {
+        List<Match> allMatches = matchRepository.findAll();
+        return allMatches;
     }
 
     public void fetchTeams() {
@@ -81,9 +106,9 @@ public class FootballClient {
         for (Competition comp : allComps) {
             Long compId = comp.getId();
 
-            String uri = "/v4/competitions/" + compId.toString() + "/teams";
+            String URI = "/v4/competitions/" + compId.toString() + "/teams";
             JsonNode rootNode = footballClient.get()
-            .uri(uri)
+            .uri(URI)
             .retrieve()
             .body(JsonNode.class);
             
@@ -97,11 +122,12 @@ public class FootballClient {
             }
 
         }
-    }
+    }    
     public List<Team> getTeams() {
         List<Team> allTeams = teamRepository.findAll();
         return allTeams;
     }
+    
     public void fetchCompetitions() {
         RestClient footballClient = RestClient.builder()
         .baseUrl(BASE_URL)
@@ -109,7 +135,7 @@ public class FootballClient {
         .build();
 
         JsonNode rootNode = footballClient.get()
-        .uri("/v4/competitions?areas=2077")
+        .uri("/v4/competitions?areas=2077") //2077 for Europe
         .retrieve()
         .body(JsonNode.class);
 

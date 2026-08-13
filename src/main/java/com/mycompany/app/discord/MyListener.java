@@ -29,10 +29,15 @@ public class MyListener extends ListenerAdapter {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("Pong!").queue();
         }
-        if (content.equals("!fixtures")) {
-            MessageChannel channel = event.getChannel();
-            channel.sendMessage("Saved some matches").queue();
-         }
+        // if (content.equals("!fixtures")) {
+        //     MessageChannel channel = event.getChannel();
+        //     channel.sendMessage("I'm starting to save matches").queue();
+        //     new Thread(() -> {
+        //         footballClient.fetchFixtures();
+        //         channel.sendMessage("Finished fetching all of the matches");
+        //     }).start();
+        //     channel.sendMessage("I love fortnite").queue();
+        //  }
         // if (content.equals("!teams")) {
         //     MessageChannel channel = event.getChannel();
             
