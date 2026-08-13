@@ -1,17 +1,20 @@
 package com.mycompany.app.client;
 
 import java.util.List;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.mycompany.app.repository.TeamRepository;
-import com.mycompany.app.model.Team;
-import com.mycompany.app.model.Competition;
-import com.mycompany.app.model.Match;
-import com.mycompany.app.repository.CompetitionRepository;
-import com.mycompany.app.repository.MatchRepository;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.mycompany.app.model.Competition;
+import com.mycompany.app.model.Match;
+import com.mycompany.app.model.Standing;
+import com.mycompany.app.model.Team;
+import com.mycompany.app.repository.CompetitionRepository;
+import com.mycompany.app.repository.MatchRepository;
+import com.mycompany.app.repository.StandingRepository;
+import com.mycompany.app.repository.TeamRepository;
 
 @Service
 public class FootballClient {
@@ -24,11 +27,12 @@ public class FootballClient {
     private final TeamRepository teamRepository;
     private final MatchRepository matchRepository;
     private final CompetitionRepository competitionRepository;
-
-    public FootballClient(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository) {
+    private final StandingRepository standingRepository;
+    public FootballClient(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository) {
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
         this.competitionRepository = competitionRepository;
+        this.standingRepository = standingRepository;
     }
     public void fetchFixtures() {
 
@@ -95,7 +99,59 @@ public class FootballClient {
         List<Match> allMatches = matchRepository.findAll();
         return allMatches;
     }
+    public void fetchStandings() {
+        RestClient footballClient = RestClient.builder()
+        .baseUrl(BASE_URL)
+        .defaultHeader(HEADER,footballApi)
+        .build();
 
+        List<Competition> allComps = getCompetitions();
+        
+        for (Competition competition : allComps) {
+            
+            if (competition.getType().equals("LEAGUE")) {
+                standingRepository.deleteByCompetition(competition);
+                String URI = "/v4/competitions/" + competition.getId().toString() + "/standings";
+                JsonNode rootNode = footballClient.get()
+                .uri(URI)
+                .retrieve()
+                .body(JsonNode.class);
+                
+                JsonNode standingsNode = rootNode.get("standings");
+                for (JsonNode standing : standingsNode) {
+                    if (standing.get("type").asText().equals("TOTAL")) {
+                        JsonNode table = standing.get("table");
+                        for (JsonNode tableNode : table) {
+                            Integer position = tableNode.get("position").asInt();
+                            JsonNode teamNode = tableNode.get("team");
+                            Long teamId = teamNode.get("id").asLong();
+                            String teamName = teamNode.get("shortName").asText();
+                            
+                            Team team = teamRepository.findById(teamId)
+                            .orElseGet(() -> teamRepository.save(new Team(teamId, teamName)));
+                            
+                            Integer playedGames = tableNode.get("playedGames").asInt();
+                            JsonNode formNode = tableNode.get("form");
+                            String form = (formNode == null || formNode.isNull()) ? "-" : formNode.asText();
+                            Integer gamesWon = tableNode.get("won").asInt();
+                            Integer gamesDrawn = tableNode.get("draw").asInt();
+                            Integer gamesLost = tableNode.get("lost").asInt();
+                            Integer points = tableNode.get("points").asInt();
+                            Integer goalsFor = tableNode.get("goalsFor").asInt();
+                            Integer goalsAgainst = tableNode.get("goalsAgainst").asInt();
+                            Integer goalDifference = tableNode.get("goalDifference").asInt();
+                            standingRepository.save(new Standing(team,competition, position, playedGames, form, gamesWon, gamesDrawn, gamesLost, points, goalsFor, goalsAgainst, goalDifference));    
+                        }
+                    break;
+                    }
+                }
+            }
+        }
+    }
+
+    public List<Standing> getStandings(Competition competition) {
+        return standingRepository.findByCompetitionOrderByPositionAsc(competition);
+    }
     public void fetchTeams() {
         RestClient footballClient = RestClient.builder()
         .baseUrl(BASE_URL)

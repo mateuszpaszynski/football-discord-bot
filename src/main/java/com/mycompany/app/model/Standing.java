@@ -22,21 +22,31 @@ public class Standing {
 
     private Integer position;
     private Integer playedGames;
+    private String form;
+    private Integer gamesWon;
+    private Integer gamesDrawn;
+    private Integer gamesLost;
     private Integer points;
     private Integer goalsFor;
     private Integer goalsAgainst;
+    private Integer goalDifference;
     
     public Standing() {
 
     }
-    public Standing(Team team, Competition competition, Integer position, Integer playedGames, Integer points, Integer goalsFor, Integer goalsAgainst) {
+    public Standing(Team team, Competition competition, Integer position, Integer playedGames, String form, Integer gamesWon, Integer gamesDrawn, Integer gamesLost, Integer points, Integer goalsFor, Integer goalsAgainst, Integer goalDifference) {
         this.team = team;
         this.competition = competition;
         this.position = position;
         this.playedGames = playedGames;
+        this.form = form;
+        this.gamesWon = gamesWon;
+        this.gamesDrawn = gamesDrawn;
+        this.gamesLost = gamesLost;
         this.points = points;
         this.goalsFor = goalsFor;
         this.goalsAgainst = goalsAgainst;
+        this.goalDifference = goalDifference;
     }
     public Team getTeam() {
         return this.team;
@@ -62,6 +72,34 @@ public class Standing {
     public void setPlayedGames(Integer playedGames) {
         this.playedGames = playedGames;
     }
+    public String getForm() {
+        return this.form;
+    }
+    public void setForm(String form) {
+        this.form = form;
+    }
+    public Integer getGamesWon() {
+        return this.gamesWon;
+    }
+    
+    public void setGamesWon(Integer gamesWon) {
+        this.gamesWon = gamesWon;
+    }
+    public Integer getGamesDrawn() {
+        return this.gamesDrawn;
+    }
+    
+    public void setGamesDrawn(Integer gamesDrawn) {
+        this.gamesDrawn = gamesDrawn;
+    }
+    public Integer getGamesLost() {
+        return this.gamesLost;
+    }
+    
+    public void setGamesLost(Integer gamesLost) {
+        this.gamesLost = gamesLost;
+    }
+
     public Integer getPoints() {
         return this.points;
     }
@@ -71,6 +109,7 @@ public class Standing {
     public Integer getGoalsFor() {
         return this.goalsFor;
     }
+    
     public void setGoalsFor(Integer goalsFor) {
         this.goalsFor = goalsFor;
     }
@@ -79,6 +118,12 @@ public class Standing {
     }
     public void setGoalsAgainst(Integer goalsAgainst) {
         this.goalsAgainst = goalsAgainst;
+    }
+    public Integer getGoalDifference() {
+        return this.goalDifference;
+    }
+    public void setGoalDifference(Integer goalDifference) {
+        this.goalDifference = goalDifference;
     }
 
 }
