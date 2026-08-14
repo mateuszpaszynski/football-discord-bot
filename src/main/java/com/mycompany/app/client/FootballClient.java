@@ -11,6 +11,8 @@ import com.mycompany.app.model.Competition;
 import com.mycompany.app.model.Match;
 import com.mycompany.app.model.Standing;
 import com.mycompany.app.model.Team;
+import java.util.Optional;
+import java.util.Map;
 import com.mycompany.app.repository.CompetitionRepository;
 import com.mycompany.app.repository.MatchRepository;
 import com.mycompany.app.repository.StandingRepository;
@@ -28,6 +30,7 @@ public class FootballClient {
     private final MatchRepository matchRepository;
     private final CompetitionRepository competitionRepository;
     private final StandingRepository standingRepository;
+
     public FootballClient(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository) {
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
@@ -61,17 +64,19 @@ public class FootballClient {
                     
                         JsonNode homeTeamNode = matchJson.get("homeTeam");
                         Long homeTeamId = homeTeamNode.get("id").asLong();
-                        String homeTeamName = homeTeamNode.get("shortName").asText();
-
+                        String homeTeamName = homeTeamNode.get("name").asText();
+                        String homeTeamShortName = homeTeamNode.get("shortName").asText();
+                        String homeTeamTla = homeTeamNode.get("tla").asText();
                         Team homeTeam = teamRepository.findById(homeTeamId)
-                            .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName)));
+                            .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName,homeTeamTla)));
 
                         JsonNode awayTeamNode = matchJson.get("awayTeam");
                         Long awayTeamId = awayTeamNode.get("id").asLong();
                         String awayTeamName = awayTeamNode.get("shortName").asText();
-                        
+                        String awayTeamShortName = awayTeamNode.get("shortName").asText();
+                        String awayTeamTla = awayTeamNode.get("tla").asText();
                         Team awayTeam = teamRepository.findById(awayTeamId)
-                            .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName)));
+                            .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName,awayTeamShortName,awayTeamTla)));
 
                         Long matchId = matchJson.get("id").asLong();
                         String utcDate = matchJson.get("utcDate").asText();
@@ -99,9 +104,11 @@ public class FootballClient {
         List<Match> allMatches = matchRepository.findAll();
         return allMatches;
     }
-    public Competition getCompetition(String code) {
-        return competitionRepository.findByCode(code)
-        .orElseThrow(() -> new IllegalArgumentException("League with code " + code + " not found"));
+    public Competition getCompetition(String query) {
+
+        return competitionRepository.findByCode(query)
+        .or(() -> competitionRepository.findByName(query))
+        .orElseThrow(() -> new IllegalArgumentException("League " + query + " not found"));
     }
     public void fetchStandings() {
         RestClient footballClient = RestClient.builder()
@@ -129,10 +136,11 @@ public class FootballClient {
                             Integer position = tableNode.get("position").asInt();
                             JsonNode teamNode = tableNode.get("team");
                             Long teamId = teamNode.get("id").asLong();
-                            String teamName = teamNode.get("shortName").asText();
-                            
+                            String teamName = teamNode.get("name").asText();
+                            String teamShortName = teamNode.get("shortName").asText();
+                            String teamTla = teamNode.get("tla").asText();
                             Team team = teamRepository.findById(teamId)
-                            .orElseGet(() -> teamRepository.save(new Team(teamId, teamName)));
+                            .orElseGet(() -> teamRepository.save(new Team(teamId, teamName, teamShortName, teamTla)));
                             
                             Integer playedGames = tableNode.get("playedGames").asInt();
                             JsonNode formNode = tableNode.get("form");
@@ -175,17 +183,22 @@ public class FootballClient {
             JsonNode teamsNode = rootNode.get("teams");
 
             for (JsonNode teamNode : teamsNode) {
+
                 Long teamId = teamNode.get("id").asLong();
                 String name = teamNode.get("name").asText();
-                Team team = new Team(teamId,name);
+                String shortName = teamNode.get("shortName").asText();
+                String tla = teamNode.get("tla").asText();
+                Team team = new Team(teamId,name,shortName, tla);
                 teamRepository.save(team);
             }
 
         }
     }    
-    public List<Team> getTeams() {
-        List<Team> allTeams = teamRepository.findAll();
-        return allTeams;
+    public List<Team> getTeams(Competition league) {
+        return getStandings(league).stream()
+        .map(Standing::getTeam)
+        .distinct()
+        .toList();
     }
     
     public void fetchCompetitions() {

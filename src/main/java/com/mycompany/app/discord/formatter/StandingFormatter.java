@@ -7,16 +7,14 @@ public class StandingFormatter {
     public static String format(List<Standing> standings) {
         
         StringBuilder sb = new StringBuilder();        
-        sb.append("```\n"); // Start bloku kodu Discorda
-        sb.append(" #| Team                       |  M |  W |  D |  L |  GF |  GA |  GD | Pts |  Last 5   |\n");
-        sb.append("----------------------------------------------------------------------------------------\n");
+        sb.append("```\n");
+        sb.append(" #| Team             |  M |  W |  D |  L |  GF |  GA |  GD | Pts |  Last 5   |\n");
+        sb.append("------------------------------------------------------------------------------\n");
         for (Standing standing : standings) {
-            
-            // Tutaj używamy String.format do stworzenia równego wiersza 
-            // i NATYCHMIAST wrzucamy go do naszego StringBuildera
-            sb.append(String.format("%2d| %-26s | %2d | %2d | %2d | %2d | %3d | %3d | %3d | %3d | %9s |\n",
+            String name = (standing.getTeam().getShortName() == null || standing.getTeam().getShortName().equals("null") ? standing.getTeam().getName() : standing.getTeam().getShortName());
+            sb.append(String.format("%2d| %-16s | %2d | %2d | %2d | %2d | %3d | %3d | %3d | %3d | %9s |\n",
                     standing.getPosition(),
-                    standing.getTeam().getName(), 
+                    name,
                     standing.getPlayedGames(),
                     standing.getGamesWon(),
                     standing.getGamesDrawn(),

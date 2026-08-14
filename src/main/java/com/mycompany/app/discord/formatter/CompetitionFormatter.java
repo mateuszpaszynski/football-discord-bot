@@ -5,7 +5,7 @@ import com.mycompany.app.model.Competition;
 public class CompetitionFormatter {
     public static String format(List<Competition> allComps) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Available competitions : \n");
+        sb.append("**Available competitions** : \n");
         sb.append("```");
         sb.append("Name                  | code |\n");
         sb.append("------------------------------\n");

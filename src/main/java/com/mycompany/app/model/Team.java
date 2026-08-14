@@ -10,6 +10,8 @@ public class Team {
     private Long id; 
     
     private String name;
+    private String shortName;
+    private String tla;
 
     public Long getId() {
         return id;
@@ -17,18 +19,35 @@ public class Team {
     public String getName() {
         return name;
     }
-    public void setId(Long _id) {
-        this.id = _id;
+    public void setId(Long id) {
+        this.id = id;
     }
-    public void setName(String _name) {
-        this.name = _name;
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getTla() {
+        if ( this.tla == null || this.tla.equals(null)) {
+            return " - ";
+        }
+        return this.tla;
+    }
+    public void setTla(String tla) {
+        this.tla = tla;
+    }
+    public String getShortName() {
+        return this.shortName;
+    }
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public Team(){
         
     }
-    public Team(Long _id, String _name){
-        this.id = _id;
-        this.name = _name;
+    public Team(Long id, String name, String shortName, String tla){
+        this.id = id;
+        this.name = name;
+        this.shortName = shortName;
+        this.tla = tla;
     }
 }

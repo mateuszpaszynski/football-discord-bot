@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface CompetitionRepository extends JpaRepository<Competition, Long> {
     
     Optional<Competition> findByCode(String code);
+    Optional<Competition> findByName(String code);
 }
