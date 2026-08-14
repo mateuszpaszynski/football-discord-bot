@@ -12,12 +12,19 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class MyListener extends ListenerAdapter {
     
     private final FootballClient footballClient;
     public MyListener(FootballClient footballClient) {
         this.footballClient = footballClient;
+    }
+    private void sendHelpMessage(MessageChannel channel, String errorMessage) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(errorMessage).append("\n\n**Available Leagues:**\n");
+        sb.append(CompetitionFormatter.format(footballClient.getCompetitions()));
+        channel.sendMessage(sb.toString()).queue();
     }
 
     @Override
@@ -31,38 +38,28 @@ public class MyListener extends ListenerAdapter {
         
         String[] args = content.split("\\s+");
 
-        // if (args[0].equals("!standings")) {
-        //     try {
-        //         if (args.length < 2) {
-        //             channel.sendMessage("Too few arguments you need to specify the Leauge").queue();
-        //             return;
-        //         }
-        //         String leagueCode = args[1];
+        if (args[0].equals("!standings")) {
+            if (args.length < 2) {
+                sendHelpMessage(channel, "Error: Too few arguments. You need to specify the League.");
+                return;
+            }
+            String searchPhrase = args[1];
+            try {
+                Competition league = footballClient.getCompetition(searchPhrase);
+                List<Standing> standings = footballClient.getStandings(league);
+                if ( standings.size() > 20) {
+                    int mid = standings.size() / 2;
+                    channel.sendMessage(StandingFormatter.format(standings.subList(0,mid))).queue();
+                    channel.sendMessage(StandingFormatter.format(standings.subList(mid,standings.size()))).queue();
+                }
+                else {
+                    channel.sendMessage(StandingFormatter.format(standings)).queue();
+                }
 
-        //         Competition Laliga = footballClient.getCompetition(2014L);
-        //         List<Standing> standings = footballClient.getStandings(Laliga);
-        //         String table = StandingFormatter.format(standings);
-        //         channel.sendMessage(table).queue();
-        //     }
-        //     catch (IllegalArgumentException e) {
-        //         channel.sendMessage("ACHTUNG!!!" + e.getMessage()).queue();
-        //     }
-        // }
-        
-        // if (content.equals("!fixtures")) {
-        //     MessageChannel channel = event.getChannel();
-        //     channel.sendMessage("I'm starting to save matches").queue();
-        //     new Thread(() -> {
-        //         footballClient.fetchFixtures();
-        //         channel.sendMessage("Finished fetching all of the matches");
-        //     }).start();
-        //     channel.sendMessage("I love fortnite").queue();
-        //  }
-        // if (content.equals("!teams")) {
-        //     MessageChannel channel = event.getChannel();
-            
-        //     channel.sendMessage("fetched some teams").queue();
-        // }
+            } catch (IllegalArgumentException e) {
+                sendHelpMessage(channel, "Error : League '" + searchPhrase + "' not found.");
+            }
+        }
         if (args[0].equals("!competitions")) {
             List<Competition> comps = footballClient.getCompetitions();
             String competitions = CompetitionFormatter.format(comps);

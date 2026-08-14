@@ -99,9 +99,9 @@ public class FootballClient {
         List<Match> allMatches = matchRepository.findAll();
         return allMatches;
     }
-    public Competition getCompetition(Long id) {
-        return competitionRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("League with ID " + id + " not found"));
+    public Competition getCompetition(String code) {
+        return competitionRepository.findByCode(code)
+        .orElseThrow(() -> new IllegalArgumentException("League with code " + code + " not found"));
     }
     public void fetchStandings() {
         RestClient footballClient = RestClient.builder()
