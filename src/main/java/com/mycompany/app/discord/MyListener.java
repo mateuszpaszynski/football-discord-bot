@@ -3,6 +3,9 @@ package com.mycompany.app.discord;
 import com.mycompany.app.client.FootballClient;
 import java.util.List;
 import com.mycompany.app.model.Competition;
+import com.mycompany.app.model.Standing;
+import com.mycompany.app.discord.formatter.StandingFormatter;
+import com.mycompany.app.discord.formatter.CompetitionFormatter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -13,9 +16,8 @@ import org.springframework.stereotype.Component;
 public class MyListener extends ListenerAdapter {
     
     private final FootballClient footballClient;
-
-    public MyListener(FootballClient _footballClient) {
-        footballClient = _footballClient;
+    public MyListener(FootballClient footballClient) {
+        this.footballClient = footballClient;
     }
 
     @Override
@@ -24,16 +26,28 @@ public class MyListener extends ListenerAdapter {
         
         Message message = event.getMessage();
         String content = message.getContentRaw(); 
+
+        MessageChannel channel = event.getChannel();
         
-        if (content.equals("!ping")) {
-            MessageChannel channel = event.getChannel();
-            channel.sendMessage("Pong!").queue();
-        }
-        if (content.equals("!standings")) {
-            MessageChannel channel = event.getChannel();
-            footballClient.fetchStandings();
-            channel.sendMessage("Fetched some standings").queue();
-        }
+        String[] args = content.split("\\s+");
+
+        // if (args[0].equals("!standings")) {
+        //     try {
+        //         if (args.length < 2) {
+        //             channel.sendMessage("Too few arguments you need to specify the Leauge").queue();
+        //             return;
+        //         }
+        //         String leagueCode = args[1];
+
+        //         Competition Laliga = footballClient.getCompetition(2014L);
+        //         List<Standing> standings = footballClient.getStandings(Laliga);
+        //         String table = StandingFormatter.format(standings);
+        //         channel.sendMessage(table).queue();
+        //     }
+        //     catch (IllegalArgumentException e) {
+        //         channel.sendMessage("ACHTUNG!!!" + e.getMessage()).queue();
+        //     }
+        // }
         
         // if (content.equals("!fixtures")) {
         //     MessageChannel channel = event.getChannel();
@@ -49,30 +63,10 @@ public class MyListener extends ListenerAdapter {
             
         //     channel.sendMessage("fetched some teams").queue();
         // }
-        if (content.equals("!competitions")) {
-            MessageChannel channel = event.getChannel();
-            
+        if (args[0].equals("!competitions")) {
             List<Competition> comps = footballClient.getCompetitions();
-            
-            int maxLength = 0;
-            for (Competition comp : comps) {
-                maxLength = Math.max(maxLength,comp.getName().length());
-            }
-            
-            StringBuilder sb = new StringBuilder();
-
-            sb.append("Available competitions: \n");
-            sb.append("```text\n");
-            
-            for (Competition comp : comps) {
-                String formatPattern = "%-" + maxLength + "s";   
-   
-                String paddedName = String.format(formatPattern, comp.getName());
-                
-                sb.append(paddedName).append(" | ").append(comp.getCountry()).append("\n");
-            }
-            sb.append("```");
-            channel.sendMessage(sb.toString()).queue();
+            String competitions = CompetitionFormatter.format(comps);
+            channel.sendMessage(competitions).queue();
         }
         
     }

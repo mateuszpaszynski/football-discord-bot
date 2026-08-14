@@ -99,6 +99,10 @@ public class FootballClient {
         List<Match> allMatches = matchRepository.findAll();
         return allMatches;
     }
+    public Competition getCompetition(Long id) {
+        return competitionRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("League with ID " + id + " not found"));
+    }
     public void fetchStandings() {
         RestClient footballClient = RestClient.builder()
         .baseUrl(BASE_URL)
@@ -132,7 +136,7 @@ public class FootballClient {
                             
                             Integer playedGames = tableNode.get("playedGames").asInt();
                             JsonNode formNode = tableNode.get("form");
-                            String form = (formNode == null || formNode.isNull()) ? "-" : formNode.asText();
+                            String form = (formNode == null || formNode.isNull()) ? "    -    " : formNode.asText();
                             Integer gamesWon = tableNode.get("won").asInt();
                             Integer gamesDrawn = tableNode.get("draw").asInt();
                             Integer gamesLost = tableNode.get("lost").asInt();
@@ -200,10 +204,11 @@ public class FootballClient {
         for (JsonNode competition : competitionsNode) {
             Long competitionId = competition.get("id").asLong();
             String name = competition.get("name").asText();
+            String code = competition.get("code").asText();
             String type = competition.get("type").asText();
             JsonNode area = competition.get("area");
             String country = area.get("name").asText();
-            Competition comp = new Competition(competitionId,name,type,country);
+            Competition comp = new Competition(competitionId,name,code,type,country);
             competitionRepository.save(comp);
         }
     }

@@ -9,7 +9,7 @@ public class Competition {
     private Long id;
 
     private String name;
-
+    private String code;
     private String type;
 
     private String country;
@@ -27,6 +27,12 @@ public class Competition {
     public void setName(String name) {
         this.name = name;
     }
+    public String getCode() {
+        return this.code;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
     public String getType() {
         return this.type;
     }
@@ -42,9 +48,10 @@ public class Competition {
     public Competition() {
 
     }
-    public Competition(Long id, String name, String type, String country) {
+    public Competition(Long id, String name, String code, String type, String country) {
         this.id = id;
         this.name = name;
+        this.code = code;
         this.type = type;
         this.country = country;
     }
