@@ -3,8 +3,10 @@ package com.mycompany.app.client;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mycompany.app.model.Competition;
@@ -43,76 +45,94 @@ public class FootballClient {
             .baseUrl(BASE_URL)
             .defaultHeader(HEADER, footballApi)
             .build();
-        
-            List<Team> allTeams = teamRepository.findAll();
 
-            for (Team team : allTeams) {
+        List<Competition> competitions = getCompetitions();
 
-                Long teamId = team.getId();
+        for (Competition competition : competitions) {
+            
+            String leagueCode = competition.getCode();
+            
+            try {
                 
-                try {
-                    String URI = "/v4/teams/" + teamId.toString() + "/matches?status=SCHEDULED";
-                
-                    JsonNode rootNode = footballClient.get()
+                String URI = "/v4/competitions/" + leagueCode + "/matches";
+            
+                JsonNode rootNode = footballClient.get()
                     .uri(URI)
                     .retrieve()
                     .body(JsonNode.class);
+
+                JsonNode matchesNode = rootNode.get("matches");
+
+                for (JsonNode matchJson : matchesNode) {
+                
+                
+                    JsonNode homeTeamNode = matchJson.get("homeTeam");
+                    Long homeTeamId = homeTeamNode.get("id").asLong();
+                    String homeTeamName = homeTeamNode.get("name").asText();
                     
-                    JsonNode matchesNode = rootNode.get("matches");
+                
+                    String homeTeamShortName = homeTeamNode.hasNonNull("shortName") ? homeTeamNode.get("shortName").asText() : homeTeamName;
+                    String rawHomeTla = homeTeamNode.hasNonNull("tla") ? homeTeamNode.get("tla").asText() : "N/A";
+                    String homeTeamTla = rawHomeTla.equals("N/A") 
+                            ? homeTeamName.substring(0, Math.min(3, homeTeamName.length())).toUpperCase() 
+                            : rawHomeTla;
 
-                    for (JsonNode matchJson : matchesNode) {
+                    Team homeTeam = teamRepository.findById(homeTeamId)
+                        .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName, homeTeamTla)));
+
+
+                    JsonNode awayTeamNode = matchJson.get("awayTeam");
+                    Long awayTeamId = awayTeamNode.get("id").asLong();
                     
-                        JsonNode homeTeamNode = matchJson.get("homeTeam");
-                        Long homeTeamId = homeTeamNode.get("id").asLong();
-                        String homeTeamName = homeTeamNode.get("name").asText();
-                        String homeTeamShortName = homeTeamNode.get("shortName").asText();
-                        String homeTeamTla = homeTeamNode.get("tla").asText();
-                        Team homeTeam = teamRepository.findById(homeTeamId)
-                            .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName,homeTeamTla)));
+                    String awayTeamName = awayTeamNode.get("name").asText(); 
+                    
+                    String awayTeamShortName = awayTeamNode.hasNonNull("shortName") ? awayTeamNode.get("shortName").asText() : awayTeamName;
+                    String rawAwayTla = awayTeamNode.hasNonNull("tla") ? awayTeamNode.get("tla").asText() : "N/A";
+                    String awayTeamTla = rawAwayTla.equals("N/A") 
+                            ? awayTeamName.substring(0, Math.min(3, awayTeamName.length())).toUpperCase() 
+                            : rawAwayTla;
 
-                        JsonNode awayTeamNode = matchJson.get("awayTeam");
-                        Long awayTeamId = awayTeamNode.get("id").asLong();
-                        String awayTeamName = awayTeamNode.get("shortName").asText();
-                        String awayTeamShortName = awayTeamNode.get("shortName").asText();
-                        String awayTeamTla = awayTeamNode.get("tla").asText();
-                        Team awayTeam = teamRepository.findById(awayTeamId)
-                            .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName,awayTeamShortName,awayTeamTla)));
+                    Team awayTeam = teamRepository.findById(awayTeamId)
+                        .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName, awayTeamShortName, awayTeamTla)));
 
-                        Long matchId = matchJson.get("id").asLong();
-                        String utcDate = matchJson.get("utcDate").asText();
-                        String status = matchJson.get("status").asText();
-                        
-                        Match match = new Match(matchId, 2014L, utcDate, status, homeTeam, awayTeam, "TBD");
+                    Long matchId = matchJson.get("id").asLong();
+                    String utcDate = matchJson.get("utcDate").asText();
+                    String status = matchJson.get("status").asText();
+                    String score = matchJson.get("score").asText();
 
-                        matchRepository.save(match);
-                    }
+                    Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, "TBD");
+                    
+                    matchRepository.save(match);
                 }
                 
-                catch (Exception e) {
-                    System.err.println("Error with fetching matches for team " + teamId + " cause " + e.getMessage());
-                }
-                System.out.println("Saved matches. 6.5 seconds of sleep for obeying rate limiting");
-                try {
-                    Thread.sleep(6500); 
-                } catch (InterruptedException e) {
-                    
-                    Thread.currentThread().interrupt();    
-                }
+                System.out.println("Saved all matches form league: " + leagueCode);
+                
+            } catch (Exception e) {
+                System.err.println("Error with fetching matches for competition " + leagueCode + " cause " + e.getMessage());
             }
+            
+            System.out.println("6.5 seconds of sleep for obeying rate limiting...");
+            try {
+                Thread.sleep(6500); 
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();    
+            }
+        }
     }
     public Team getTeam(String query) {
         return teamRepository.findByTla(query.toUpperCase()).or(() -> teamRepository.findByName(query))
         .or(() -> teamRepository.findByShortName(query))
-        .or(() -> teamRepository.findById(Long.valueOf(query).longValue()))
+        .or(() -> teamRepository.findById(Long.valueOf(query)))
         .orElseThrow(() -> new IllegalArgumentException("Team " + query + "not found"));
     }
     public List<Match> getMatches(Team team) {
-        List<Match> allMatches = matchRepository.findNextMatchesForTeam(team);
+        List<Match> allMatches = matchRepository.findNextMatchesForTeam(team,PageRequest.of(0, 5));
         return allMatches;
     }
     public Competition getCompetition(String query) {
         return competitionRepository.findByCode(query.toUpperCase())
         .or(() -> competitionRepository.findByName(query))
+        .or(() -> competitionRepository.findById(Long.valueOf(query)))
         .orElseThrow(() -> new IllegalArgumentException("League " + query + " not found"));
     }
     public void fetchStandings() {

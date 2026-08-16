@@ -11,6 +11,7 @@ import com.mycompany.app.model.Standing;
 import com.mycompany.app.discord.formatter.TeamFormatter;
 import com.mycompany.app.discord.formatter.StandingFormatter;
 import com.mycompany.app.discord.formatter.CompetitionFormatter;
+import com.mycompany.app.discord.formatter.MatchFormatter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -43,8 +44,26 @@ public class MyListener extends ListenerAdapter {
         
         String[] args = content.split("\\s+");
         if (args[0].equals("!load")) {
-            footballClient.fetchStandings();
-            //footballClient.fetchFixtures();
+            
+            channel.sendMessage("Fetching standings").queue();
+
+            new Thread(() -> {
+                try {
+                    footballClient.fetchStandings();
+                    channel.sendMessage("Fetched standings, after minute starting to fetch matches").queue();
+                    Thread.sleep(1000 * 60); 
+
+                    footballClient.fetchFixtures();
+                    channel.sendMessage("Finished fetching all of the matches!").queue(); 
+                    
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (Exception e) {
+                    // 3. Łapiemy błędy, żeby bot nie umarł w ciszy
+                    channel.sendMessage("**Error**: " + e.getMessage()).queue();
+                }
+            }).start();
+
             return;
         }
         
@@ -57,18 +76,7 @@ public class MyListener extends ListenerAdapter {
             try {
                 Team team = footballClient.getTeam(searchPhrase);
                 List<Match> matches = footballClient.getMatches(team);
-                StringBuilder sb = new StringBuilder();
-                sb.append("```\n");
-                int i = 0;
-                for (Match match : matches) {
-                    sb.append(match.getHomeTeam().getName() + " - " + match.getAwayTeam().getName() + "\n" + match.getTime() + "\n");    
-                    i++;
-                    if ( i > 5) {
-                        break;
-                    }
-                }
-                sb.append("```");
-                channel.sendMessage(sb.toString()).queue();
+                channel.sendMessage("Next 5 **" + team.getShortName() + "** matches\n\n" + MatchFormatter.format(matches)).queue();
             }
             catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());

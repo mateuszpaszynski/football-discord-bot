@@ -9,8 +9,9 @@ public class Match {
 
     @Id
     private Long id;
-    
-    private Long competitionId;
+    @ManyToOne
+    @JoinColumn(name = "competition_id")
+    private Competition competition;
     private String time;
     private String status;
 
@@ -27,9 +28,9 @@ public class Match {
     public Match() {
 
     }
-    public Match(Long id, Long competitionId, String time, String status, Team homeTeam, Team awayTeam, String score) {
+    public Match(Long id, Competition competition, String time, String status, Team homeTeam, Team awayTeam, String score) {
        this.id = id;
-       this.competitionId = competitionId;
+       this.competition = competition;
        this.time = time;
        this.status = status;
        this.homeTeam = homeTeam;
@@ -42,11 +43,11 @@ public class Match {
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getCompetitionId() {
-        return this.competitionId;
+    public Competition getCompetition() {
+        return this.competition;
     }
-    public void setCompetitionId(Long competitionId) {
-        this.competitionId = competitionId;
+    public void setCompetition(Competition competitionId) {
+        this.competition = competitionId;
     }
 
     public String getTime() {
