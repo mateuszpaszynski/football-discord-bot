@@ -64,13 +64,13 @@ public class Match {
     public Team getHomeTeam() {
         return this.homeTeam;
     }
-    public void setHomeTeamId(Team homeTeam) {
+    public void setHomeTeam(Team homeTeam) {
         this.homeTeam = homeTeam;
     }
-    public Team getAwayTeamId() {
+    public Team getAwayTeam() {
         return this.awayTeam;
     }
-    public void setAwayTeamId(Team awayTeam) {
+    public void setAwayTeam(Team awayTeam) {
         this.awayTeam = awayTeam;
     }
     public String getScore() {

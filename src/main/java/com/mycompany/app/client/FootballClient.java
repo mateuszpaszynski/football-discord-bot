@@ -100,13 +100,18 @@ public class FootballClient {
                 }
             }
     }
-    public List<Match> getMatches() {
-        List<Match> allMatches = matchRepository.findAll();
+    public Team getTeam(String query) {
+        return teamRepository.findByTla(query.toUpperCase()).or(() -> teamRepository.findByName(query))
+        .or(() -> teamRepository.findByShortName(query))
+        .or(() -> teamRepository.findById(Long.valueOf(query).longValue()))
+        .orElseThrow(() -> new IllegalArgumentException("Team " + query + "not found"));
+    }
+    public List<Match> getMatches(Team team) {
+        List<Match> allMatches = matchRepository.findNextMatchesForTeam(team);
         return allMatches;
     }
     public Competition getCompetition(String query) {
-
-        return competitionRepository.findByCode(query)
+        return competitionRepository.findByCode(query.toUpperCase())
         .or(() -> competitionRepository.findByName(query))
         .orElseThrow(() -> new IllegalArgumentException("League " + query + " not found"));
     }

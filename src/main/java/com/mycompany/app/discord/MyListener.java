@@ -4,6 +4,7 @@ import com.mycompany.app.client.FootballClient;
 
 import java.util.Arrays;
 import java.util.List;
+import com.mycompany.app.model.Match;
 import com.mycompany.app.model.Team;
 import com.mycompany.app.model.Competition;
 import com.mycompany.app.model.Standing;
@@ -41,12 +42,45 @@ public class MyListener extends ListenerAdapter {
         MessageChannel channel = event.getChannel();
         
         String[] args = content.split("\\s+");
-
+        if (args[0].equals("!load")) {
+            footballClient.fetchStandings();
+            //footballClient.fetchFixtures();
+            return;
+        }
+        
+        if (args[0].equals("!matches")) {
+            if (args.length < 2) {
+                sendHelpMessage(channel, "**Error** : Too few arguments. You need to specify the Team");
+                return;
+            }
+            String searchPhrase = String.join(" ", Arrays.copyOfRange(args,1,args.length));
+            try {
+                Team team = footballClient.getTeam(searchPhrase);
+                List<Match> matches = footballClient.getMatches(team);
+                StringBuilder sb = new StringBuilder();
+                sb.append("```\n");
+                int i = 0;
+                for (Match match : matches) {
+                    sb.append(match.getHomeTeam().getName() + " - " + match.getAwayTeam().getName() + "\n" + match.getTime() + "\n");    
+                    i++;
+                    if ( i > 5) {
+                        break;
+                    }
+                }
+                sb.append("```");
+                channel.sendMessage(sb.toString()).queue();
+            }
+            catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                sendHelpMessage(channel, "**Error** : Team '" + searchPhrase + "' not found.");
+            }
+        }
         if (args[0].equals("!standings")) {
             if (args.length < 2) {
                 sendHelpMessage(channel, "**Error**: Too few arguments. You need to specify the League.");
                 return;
             }
+            //footballClient.fetchStandings();
             String searchPhrase = String.join(" ", Arrays.copyOfRange(args, 1, args.length));;
             try {
                 Competition league = footballClient.getCompetition(searchPhrase);
@@ -61,6 +95,7 @@ public class MyListener extends ListenerAdapter {
                 }
 
             } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
                 sendHelpMessage(channel, "**Error** : League '" + searchPhrase + "' not found.");
             }
         }
@@ -76,6 +111,7 @@ public class MyListener extends ListenerAdapter {
                 channel.sendMessage("**Teams in " + league.getName() + "**\n" + TeamFormatter.format(teams)).queue();
             }
             catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
                 sendHelpMessage(channel,"**Error** : League '" + searchPhrase + "' not found." );
             }
         }
