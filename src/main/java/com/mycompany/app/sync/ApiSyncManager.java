@@ -1,43 +1,37 @@
-package com.mycompany.app.client;
+package com.mycompany.app.sync;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mycompany.app.model.Competition;
-import com.mycompany.app.model.Match;
 import com.mycompany.app.model.Standing;
 import com.mycompany.app.model.Team;
-
 import com.mycompany.app.repository.CompetitionRepository;
 import com.mycompany.app.repository.MatchRepository;
 import com.mycompany.app.repository.StandingRepository;
 import com.mycompany.app.repository.TeamRepository;
 
 @Service
-public class FootballClient {
-    @Value("${football.api}")
-    private String footballApi;
+public class ApiSyncManager {
 
-    private final String BASE_URL = "https://api.football-data.org";
-    private final String HEADER = "X-Auth-Token";
 
     private final TeamRepository teamRepository;
     private final MatchRepository matchRepository;
     private final CompetitionRepository competitionRepository;
     private final StandingRepository standingRepository;
 
-    public FootballClient(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository) {
+    public ApiSyncManager(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository) {
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
         this.competitionRepository = competitionRepository;
         this.standingRepository = standingRepository;
     }
-    public void fetchFixtures() {
+
+
+
+        public void fetchFixtures() {
 
         RestClient footballClient = RestClient.builder()
             .baseUrl(BASE_URL)
@@ -116,29 +110,7 @@ public class FootballClient {
             }
         }
     }
-    public List<Team> getTeam(String query) {
-        
-        List<Team> teamsByTla = teamRepository.findByTla(query.toUpperCase());
-        if (!teamsByTla.isEmpty()) return teamsByTla;
 
-        List<Team> teamsByName = teamRepository.findByShortName(query);
-        if (!teamsByName.isEmpty()) return teamsByName;
-
-        if (query.matches("\\d+")) {
-            return teamRepository.findById(Long.valueOf(query))
-                    .map(List::of) 
-                    .orElseThrow(() -> new IllegalArgumentException("Team ID " + query + " not found"));
-        }
-        throw new IllegalArgumentException("Team '" + query + "' not found");
-    }
-    public List<Match> getMatches(Team team) {
-        List<Match> allMatches = matchRepository.findNextMatchesForTeam(team,PageRequest.of(0, 5));
-        return allMatches;
-    }
-    public List<Match> getMatches(Competition competition) {
-        List<Match> allMatches = matchRepository.findNextMatchesForCompetition(competition,PageRequest.of(0,5));
-        return allMatches;
-    }
     public void fetchStandings() {
         RestClient footballClient = RestClient.builder()
         .baseUrl(BASE_URL)
@@ -190,9 +162,6 @@ public class FootballClient {
         }
     }
 
-    public List<Standing> getStandings(Competition competition) {
-        return standingRepository.findByCompetitionOrderByPositionAsc(competition);
-    }
     public void fetchTeams() {
         RestClient footballClient = RestClient.builder()
         .baseUrl(BASE_URL)
@@ -223,13 +192,7 @@ public class FootballClient {
 
         }
     }    
-    public List<Team> getTeams(Competition league) {
-        return getStandings(league).stream()
-        .map(Standing::getTeam)
-        .distinct()
-        .toList();
-    }
-    
+
     public void fetchCompetitions() {
         RestClient footballClient = RestClient.builder()
         .baseUrl(BASE_URL)
@@ -254,4 +217,5 @@ public class FootballClient {
             competitionRepository.save(comp);
         }
     }
+
 }

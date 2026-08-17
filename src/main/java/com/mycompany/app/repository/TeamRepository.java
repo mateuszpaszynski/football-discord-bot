@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
-   
+    
     List<Team> findByTla(String query);
     List<Team> findByName(String query);
     List<Team> findByShortName(String query);
