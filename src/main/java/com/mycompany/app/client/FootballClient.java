@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mycompany.app.model.Competition;
@@ -47,11 +48,10 @@ public class FootballClient {
             .build();
 
         List<Competition> competitions = getCompetitions();
-
         for (Competition competition : competitions) {
-            
+
             String leagueCode = competition.getCode();
-            
+
             try {
                 
                 String URI = "/v4/competitions/" + leagueCode + "/matches";
@@ -65,12 +65,10 @@ public class FootballClient {
 
                 for (JsonNode matchJson : matchesNode) {
                 
-                
                     JsonNode homeTeamNode = matchJson.get("homeTeam");
                     Long homeTeamId = homeTeamNode.get("id").asLong();
                     String homeTeamName = homeTeamNode.get("name").asText();
                     
-                
                     String homeTeamShortName = homeTeamNode.hasNonNull("shortName") ? homeTeamNode.get("shortName").asText() : homeTeamName;
                     String rawHomeTla = homeTeamNode.hasNonNull("tla") ? homeTeamNode.get("tla").asText() : "N/A";
                     String homeTeamTla = rawHomeTla.equals("N/A") 
@@ -98,9 +96,11 @@ public class FootballClient {
                     Long matchId = matchJson.get("id").asLong();
                     String utcDate = matchJson.get("utcDate").asText();
                     String status = matchJson.get("status").asText();
-                    String score = matchJson.get("score").asText();
-
-                    Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, "TBD");
+                    JsonNode scoreNode = matchJson.get("score");
+                    String homeGoals = scoreNode.get("fullTime").get("home").asText();
+                    String awayGoals = scoreNode.get("fullTime").get("away").asText();
+                    String score = (status.equals("FINISHED")) ? (homeGoals + " - " + awayGoals) : "TBD";
+                    Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, score);
                     
                     matchRepository.save(match);
                 }
@@ -119,14 +119,27 @@ public class FootballClient {
             }
         }
     }
-    public Team getTeam(String query) {
-        return teamRepository.findByTla(query.toUpperCase()).or(() -> teamRepository.findByName(query))
-        .or(() -> teamRepository.findByShortName(query))
-        .or(() -> teamRepository.findById(Long.valueOf(query)))
-        .orElseThrow(() -> new IllegalArgumentException("Team " + query + "not found"));
+    public List<Team> getTeam(String query) {
+        
+        List<Team> teamsByTla = teamRepository.findByTla(query.toUpperCase());
+        if (!teamsByTla.isEmpty()) return teamsByTla;
+
+        List<Team> teamsByName = teamRepository.findByShortName(query);
+        if (!teamsByName.isEmpty()) return teamsByName;
+
+        if (query.matches("\\d+")) {
+            return teamRepository.findById(Long.valueOf(query))
+                    .map(List::of) 
+                    .orElseThrow(() -> new IllegalArgumentException("Team ID " + query + " not found"));
+        }
+        throw new IllegalArgumentException("Team '" + query + "' not found");
     }
     public List<Match> getMatches(Team team) {
         List<Match> allMatches = matchRepository.findNextMatchesForTeam(team,PageRequest.of(0, 5));
+        return allMatches;
+    }
+    public List<Match> getMatches(Competition competition) {
+        List<Match> allMatches = matchRepository.findNextMatchesForCompetition(competition,PageRequest.of(0,5));
         return allMatches;
     }
     public Competition getCompetition(String query) {

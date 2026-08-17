@@ -74,13 +74,34 @@ public class MyListener extends ListenerAdapter {
             }
             String searchPhrase = String.join(" ", Arrays.copyOfRange(args,1,args.length));
             try {
-                Team team = footballClient.getTeam(searchPhrase);
+                List<Team> teams = footballClient.getTeam(searchPhrase);
+                if (teams.isEmpty()) {
+                    sendHelpMessage(channel, "**Error**: Team '" + searchPhrase + "' not found");
+                    return;
+                }
+                if (teams.size() > 1) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("**Conflict!** Found multiple teams for `").append(searchPhrase).append("`:\n```\n");
+                    for (Team t : teams) {
+                        sb.append(String.format("- %s\n", t.getShortName()));
+                    }
+                    sb.append("```\nPlease use one of the listed **names** above to specify which one you mean (e.g., `!matches Barca`).\n");
+                    channel.sendMessage(sb.toString()).queue();
+                    return;
+                }
+                Team team = teams.get(0);
                 List<Match> matches = footballClient.getMatches(team);
                 channel.sendMessage("Next 5 **" + team.getShortName() + "** matches\n\n" + MatchFormatter.format(matches)).queue();
             }
             catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-                sendHelpMessage(channel, "**Error** : Team '" + searchPhrase + "' not found.");
+                try {
+                    Competition competition = footballClient.getCompetition(searchPhrase);
+                    List<Match> matches = footballClient.getMatches(competition);
+                    channel.sendMessage("Next 5 **" + competition.getName() + "** matches\n\n" + MatchFormatter.format(matches)).queue();
+                } catch(IllegalArgumentException es) {
+                    System.out.println(e.getMessage());
+                    sendHelpMessage(channel, "**Error** : Team '" + searchPhrase + "' not found.");
+                }
             }
         }
         if (args[0].equals("!standings")) {

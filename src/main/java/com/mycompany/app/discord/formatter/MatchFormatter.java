@@ -19,8 +19,9 @@ public class MatchFormatter {
             long unixSeconds = matchTime.getEpochSecond();
             String discordTime = String.format("<t:%d:f>", unixSeconds);
 
-            String relativeTime = String.format("<t:%d:R>", unixSeconds); 
+            String relativeTime = (match.getStatus().equals("TIMED")) ? String.format("<t:%d:R>", unixSeconds) : "SCHEDULED - hour **will change**"; 
 
+            
             sb.append(String.format("🏟️ %s vs %s (%s) \n📅 %s (%s)\n\n", 
                 homeTeam.getShortName(), 
                 awayTeam.getShortName(),
