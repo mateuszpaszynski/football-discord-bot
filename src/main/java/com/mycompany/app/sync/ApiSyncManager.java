@@ -1,17 +1,23 @@
 package com.mycompany.app.sync;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.mycompany.app.client.FootballApiClient;
 import com.mycompany.app.model.Competition;
+import com.mycompany.app.model.Match;
 import com.mycompany.app.model.Standing;
 import com.mycompany.app.model.Team;
 import com.mycompany.app.repository.CompetitionRepository;
 import com.mycompany.app.repository.MatchRepository;
 import com.mycompany.app.repository.StandingRepository;
 import com.mycompany.app.repository.TeamRepository;
+import com.mycompany.app.service.CompetitionService;
+import com.mycompany.app.service.MatchService;
+import com.mycompany.app.service.StandingService;
+import com.mycompany.app.service.TeamService;
 
 @Service
 public class ApiSyncManager {
@@ -21,38 +27,35 @@ public class ApiSyncManager {
     private final MatchRepository matchRepository;
     private final CompetitionRepository competitionRepository;
     private final StandingRepository standingRepository;
+    
+    private final CompetitionService competitionService;
+    
+    private final FootballApiClient footballApiClient;
 
-    public ApiSyncManager(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository) {
+    public ApiSyncManager(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository, 
+                         CompetitionService competitionService, FootballApiClient footballApiClient
+    ) {
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
         this.competitionRepository = competitionRepository;
         this.standingRepository = standingRepository;
+
+        this.competitionService = competitionService;
+
+        this.footballApiClient = footballApiClient;
     }
 
 
 
-        public void fetchFixtures() {
+    public void fetchFixtures() {
 
-        RestClient footballClient = RestClient.builder()
-            .baseUrl(BASE_URL)
-            .defaultHeader(HEADER, footballApi)
-            .build();
-
-        List<Competition> competitions = getCompetitions();
+        List<Competition> competitions = competitionService.getCompetitions();
         for (Competition competition : competitions) {
 
             String leagueCode = competition.getCode();
-
             try {
-                
-                String URI = "/v4/competitions/" + leagueCode + "/matches";
-            
-                JsonNode rootNode = footballClient.get()
-                    .uri(URI)
-                    .retrieve()
-                    .body(JsonNode.class);
 
-                JsonNode matchesNode = rootNode.get("matches");
+                JsonNode matchesNode = footballApiClient.fetchRawFixtures(leagueCode);
 
                 for (JsonNode matchJson : matchesNode) {
                 
@@ -112,25 +115,17 @@ public class ApiSyncManager {
     }
 
     public void fetchStandings() {
-        RestClient footballClient = RestClient.builder()
-        .baseUrl(BASE_URL)
-        .defaultHeader(HEADER,footballApi)
-        .build();
 
-        List<Competition> allComps = getCompetitions();
+        List<Competition> allComps = competitionService.getCompetitions();
         
         for (Competition competition : allComps) {
             
             if (competition.getType().equals("LEAGUE")) {
-                standingRepository.deleteByCompetition(competition);
-                String URI = "/v4/competitions/" + competition.getId().toString() + "/standings";
-                JsonNode rootNode = footballClient.get()
-                .uri(URI)
-                .retrieve()
-                .body(JsonNode.class);
                 
-                JsonNode standingsNode = rootNode.get("standings");
+                JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
+                
                 for (JsonNode standing : standingsNode) {
+
                     if (standing.get("type").asText().equals("TOTAL")) {
                         JsonNode table = standing.get("table");
                         for (JsonNode tableNode : table) {
@@ -163,22 +158,12 @@ public class ApiSyncManager {
     }
 
     public void fetchTeams() {
-        RestClient footballClient = RestClient.builder()
-        .baseUrl(BASE_URL)
-        .defaultHeader(HEADER,footballApi)
-        .build();
-        
-        List<Competition> allComps = competitionRepository.findAll();
-        for (Competition comp : allComps) {
-            Long compId = comp.getId();
 
-            String URI = "/v4/competitions/" + compId.toString() + "/teams";
-            JsonNode rootNode = footballClient.get()
-            .uri(URI)
-            .retrieve()
-            .body(JsonNode.class);
-            
-            JsonNode teamsNode = rootNode.get("teams");
+        List<Competition> allComps = competitionService.getCompetitions();
+        for (Competition comp : allComps) {
+            String compId = comp.getId().toString();
+
+            JsonNode teamsNode = footballApiClient.fetchRawTeams(compId);
 
             for (JsonNode teamNode : teamsNode) {
 
@@ -189,23 +174,13 @@ public class ApiSyncManager {
                 Team team = new Team(teamId,name,shortName, tla);
                 teamRepository.save(team);
             }
-
         }
     }    
 
     public void fetchCompetitions() {
-        RestClient footballClient = RestClient.builder()
-        .baseUrl(BASE_URL)
-        .defaultHeader(HEADER,footballApi)
-        .build();
-
-        JsonNode rootNode = footballClient.get()
-        .uri("/v4/competitions?areas=2077") //2077 for Europe
-        .retrieve()
-        .body(JsonNode.class);
-
-        JsonNode competitionsNode = rootNode.get("competitions");
-
+        
+        JsonNode competitionsNode = footballApiClient.fetchRawCompetitions();
+        
         for (JsonNode competition : competitionsNode) {
             Long competitionId = competition.get("id").asLong();
             String name = competition.get("name").asText();
@@ -217,5 +192,4 @@ public class ApiSyncManager {
             competitionRepository.save(comp);
         }
     }
-
 }

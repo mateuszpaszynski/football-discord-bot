@@ -21,7 +21,7 @@ public class CompetitionService {
         .or(() -> competitionRepository.findById(Long.valueOf(query)))
         .orElseThrow(() -> new IllegalArgumentException("League " + query + " not found"));
     }
-        public List<Competition> getCompetitions() {
+    public List<Competition> getCompetitions() {
         List<Competition> allComps = competitionRepository.findAll();
         return allComps;
     }

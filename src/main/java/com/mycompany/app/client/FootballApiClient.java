@@ -21,7 +21,6 @@ public class FootballApiClient {
             .build();
     }
     public JsonNode fetchRawFixtures(String leagueCode) {
-
         try {
             String URI = "/v4/competitions/" + leagueCode + "/matches";
             JsonNode rootNode = restClient.get()
@@ -33,13 +32,11 @@ public class FootballApiClient {
             return rootNode; 
                 
             } catch (Exception e) {
-                System.err.println("Error with fetching matches for competition " + leagueCode + " cause " + e.getMessage());
-                return null;
+                throw new RuntimeException("Failed to fetch fixtures for " + leagueCode, e);
             }
         }
 
     public JsonNode fetchRawStandings(String leagueCode) {
-           
         try {
             String URI = "/v4/competitions/" + leagueCode + "/standings";
             JsonNode rootNode = restClient.get()
@@ -51,8 +48,7 @@ public class FootballApiClient {
             return rootNode;
         
         } catch (Exception e) {
-            System.err.println("Error with fetching standings for competition " + leagueCode + " cause " + e.getMessage());
-            return null;
+            throw new RuntimeException("Failed to fetch standings for " + leagueCode, e);
         }
     }
 
@@ -69,19 +65,21 @@ public class FootballApiClient {
             return rootNode;
             
         } catch (Exception e) {
-            System.err.println("Error with fetching teams for competition " + leagueCode + " cause " + e.getMessage());
-            return null;
+            throw new RuntimeException("Failed to fetch teams for " + leagueCode, e);
         }
     }    
 
     public JsonNode fetchRawCompetitions() {
 
-        JsonNode rootNode = restClient.get()
-        .uri("/v4/competitions?areas=2077") //2077 for Europe
-        .retrieve()
-        .body(JsonNode.class);
+        try {
+            JsonNode rootNode = restClient.get()
+            .uri("/v4/competitions?areas=2077") //2077 for Europe
+            .retrieve()
+            .body(JsonNode.class);
 
-        return rootNode.get("competitions");
+            return rootNode.get("competitions");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch competitions ", e);
+        }
     }
-
 }
