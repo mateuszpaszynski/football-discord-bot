@@ -4,11 +4,12 @@ import java.util.Optional;
 import com.mycompany.app.model.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
-   
-    Optional<Team> findByTla(String query);
-    Optional<Team> findByName(String query);
-    Optional<Team> findByShortName(String query);
+    
+    List<Team> findByTla(String query);
+    List<Team> findByName(String query);
+    List<Team> findByShortName(String query);
 }

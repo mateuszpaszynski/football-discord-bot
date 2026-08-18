@@ -1,7 +1,7 @@
 package com.mycompany.app.discord.formatter;
-
 import java.util.List;
 import com.mycompany.app.model.Competition;
+
 public class CompetitionFormatter {
     public static String format(List<Competition> allComps) {
         StringBuilder sb = new StringBuilder();
