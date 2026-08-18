@@ -15,9 +15,6 @@ import com.mycompany.app.repository.MatchRepository;
 import com.mycompany.app.repository.StandingRepository;
 import com.mycompany.app.repository.TeamRepository;
 import com.mycompany.app.service.CompetitionService;
-import com.mycompany.app.service.MatchService;
-import com.mycompany.app.service.StandingService;
-import com.mycompany.app.service.TeamService;
 
 @Service
 public class ApiSyncManager {
@@ -44,8 +41,6 @@ public class ApiSyncManager {
 
         this.footballApiClient = footballApiClient;
     }
-
-
 
     public void fetchFixtures() {
 
