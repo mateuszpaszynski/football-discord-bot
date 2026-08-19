@@ -12,29 +12,29 @@ public class Person {
     private String nationality;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
     public String getName() {
-        return name;
+        return this.name == null || this.name.equals("null") ? " - " : this.name;
     }
     public String getNationality() {
-        return nationality;
+        return this.nationality == null || this.nationality.equals("null") ? " - " : this.nationality;
     }
-    public void setId(Long _id) {
-        this.id = _id;
+    public void setId(Long id) {
+        this.id = id;
     }
-    public void setName(String _name) {
-        this.name = _name;
+    public void setName(String name) {
+        this.name = name;
     }
-    public void setNationality(String _nationality) {
-        this.nationality = _nationality;
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
     public Person() {
         
     }
-    public Person(Long _id, String _name, String _nationality) {
-        this.id = _id;
-        this.name = _name;
-        this.nationality = _nationality;
+    public Person(Long id, String name, String nationality) {
+        this.id = id;
+        this.name = name;
+        this.nationality = nationality;
     }
 }

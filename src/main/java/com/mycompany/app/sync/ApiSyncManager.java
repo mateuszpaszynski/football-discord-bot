@@ -134,8 +134,7 @@ public class ApiSyncManager {
                             .orElseGet(() -> teamRepository.save(new Team(teamId, teamName, teamShortName, teamTla)));
                             
                             Integer playedGames = tableNode.get("playedGames").asInt();
-                            JsonNode formNode = tableNode.get("form");
-                            String form = (formNode == null || formNode.isNull()) ? "    -    " : formNode.asText();
+                            String form = tableNode.get("form").asText();
                             Integer gamesWon = tableNode.get("won").asInt();
                             Integer gamesDrawn = tableNode.get("draw").asInt();
                             Integer gamesLost = tableNode.get("lost").asInt();

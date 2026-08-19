@@ -61,39 +61,39 @@ public class Standing {
         this.competition = competition;
     }
     public Integer getPosition() {
-        return this.position;
+        return this.position == null ? 0 : this.position;
     }
     public void setPosition(Integer position) {
         this.position = position;
     }
     public Integer getPlayedGames() {
-        return this.playedGames;
+        return this.playedGames == null ? 0 : this.playedGames;
     }
     public void setPlayedGames(Integer playedGames) {
         this.playedGames = playedGames;
     }
     public String getForm() {
-        return this.form;
+        return this.form == null || this.form.equals("null") ? " - " : this.form;
     }
     public void setForm(String form) {
         this.form = form;
     }
     public Integer getGamesWon() {
-        return this.gamesWon;
+        return this.gamesWon == null ? 0 : this.gamesWon;
     }
     
     public void setGamesWon(Integer gamesWon) {
         this.gamesWon = gamesWon;
     }
     public Integer getGamesDrawn() {
-        return this.gamesDrawn;
+        return this.gamesDrawn == null ? 0 : this.gamesDrawn;
     }
     
     public void setGamesDrawn(Integer gamesDrawn) {
         this.gamesDrawn = gamesDrawn;
     }
     public Integer getGamesLost() {
-        return this.gamesLost;
+        return this.gamesLost == null ? 0 : this.gamesLost;
     }
     
     public void setGamesLost(Integer gamesLost) {
@@ -101,26 +101,26 @@ public class Standing {
     }
 
     public Integer getPoints() {
-        return this.points;
+        return this.points == null ? 0 : this.points;
     }
     public void setPoints(Integer points) {
         this.points = points;
     }
     public Integer getGoalsFor() {
-        return this.goalsFor;
+        return this.goalsFor == null ? 0 : this.goalsFor;
     }
     
     public void setGoalsFor(Integer goalsFor) {
         this.goalsFor = goalsFor;
     }
     public Integer getGoalsAgainst() {
-        return this.goalsAgainst;
+        return this.goalsAgainst == null ? 0 : this.goalsAgainst;
     }
     public void setGoalsAgainst(Integer goalsAgainst) {
         this.goalsAgainst = goalsAgainst;
     }
     public Integer getGoalDifference() {
-        return this.goalDifference;
+        return this.goalDifference == null ? 0 : this.goalDifference;
     }
     public void setGoalDifference(Integer goalDifference) {
         this.goalDifference = goalDifference;

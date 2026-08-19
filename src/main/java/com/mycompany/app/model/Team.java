@@ -14,10 +14,10 @@ public class Team {
     private String tla;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
     public String getName() {
-        return name;
+        return this.name == null || this.name.equals("null") ? " - " :this.name;
     }
     public void setId(Long id) {
         this.id = id;
@@ -26,21 +26,17 @@ public class Team {
         this.name = name;
     }
     public String getTla() {
-        if ( this.tla == null || this.tla.equals(null)) {
-            return " - ";
-        }
-        return this.tla;
+        return this.tla == null || this.tla.equals("null") ? " - " : this.tla;
     }
     public void setTla(String tla) {
         this.tla = tla;
     }
     public String getShortName() {
-        return this.shortName;
+        return this.shortName == null || this.shortName.equals("null") ? " - " : this.shortName;
     }
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
-
     public Team(){
         
     }

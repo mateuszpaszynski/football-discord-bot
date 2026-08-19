@@ -22,25 +22,25 @@ public class Competition {
     }
 
     public String getName(){
-        return this.name;
+        return this.name == null || this.name.equals("null") ? " - " : this.name;
     }
     public void setName(String name) {
         this.name = name;
     }
     public String getCode() {
-        return this.code;
+        return this.code == null || this.code.equals("null") ? " - " : this.code;
     }
     public void setCode(String code) {
         this.code = code;
     }
     public String getType() {
-        return this.type;
+        return this.type == null || this.type.equals("null") ? " - " : this.type;
     }
     public void setType(String type) {
         this.type = type;
     }
     public String getCountry() {
-        return this.country;
+        return this.country == null || this.country.equals("null") ? " - " : this.country;
     }
     public void setCountry(String country) {
         this.country = country;

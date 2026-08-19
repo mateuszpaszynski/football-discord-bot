@@ -1,6 +1,5 @@
 package com.mycompany.app.repository;
 
-import java.util.Optional;
 import com.mycompany.app.model.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
