@@ -37,6 +37,9 @@ public class Team {
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
+    public String getDisplayName() {
+        return this.shortName == null || this.shortName.equals("null") ? this.name : this.shortName;
+    }
     public Team(){
         
     }

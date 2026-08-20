@@ -9,10 +9,9 @@ public class TeamFormatter {
         sb.append("Team             | code |\n");
         sb.append("-------------------------\n");
         for (Team team : teams) {
-            String name = (team.getShortName() == null || team.getShortName().equals("null") ? team.getName() : team.getShortName());
-        
+            
             sb.append(String.format("%-16s | %3s  |\n",
-            name,
+            team.getDisplayName(),
             team.getTla()
             ));
         }

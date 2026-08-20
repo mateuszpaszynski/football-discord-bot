@@ -23,8 +23,8 @@ public class MatchFormatter {
 
             
             sb.append(String.format("🏟️ %s vs %s (%s) \n📅 %s (%s)\n\n", 
-                homeTeam.getShortName(), 
-                awayTeam.getShortName(),
+                homeTeam.getDisplayName(), 
+                awayTeam.getDisplayName(),
                 comp.getCode(), 
                 discordTime, 
                 relativeTime
