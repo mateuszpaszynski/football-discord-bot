@@ -19,8 +19,7 @@ public class MatchService {
         this.matchRepository = matchRepository;
     }
     public List<Match> getMatches(Competition competition) {
-        List<Match> allMatches = matchRepository.findNextMatchesForCompetition(competition,PageRequest.of(0,5));
-        return allMatches;
+        return matchRepository.findNextMatchesForCompetition(competition,PageRequest.of(0,5));
     }
 
     public List<Match> getMatches(Team team) {

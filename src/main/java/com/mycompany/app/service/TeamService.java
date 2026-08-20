@@ -25,7 +25,10 @@ public class TeamService {
             List<Team> teamsByTla = teamRepository.findByTla(query.toUpperCase());
             if (!teamsByTla.isEmpty()) return teamsByTla;
 
-            List<Team> teamsByName = teamRepository.findByShortName(query);
+            List<Team> teamsByShortName = teamRepository.findByShortName(query);
+            if (!teamsByShortName.isEmpty()) return teamsByShortName;
+
+            List<Team> teamsByName = teamRepository.findByName(query);
             if (!teamsByName.isEmpty()) return teamsByName;
 
             if (query.matches("\\d+")) {
@@ -35,7 +38,6 @@ public class TeamService {
             }
             throw new IllegalArgumentException("Team '" + query + "' not found");
         }
-
         public List<Team> getTeams(Competition league) {
             
             return standingService.getStandings(league).stream()
