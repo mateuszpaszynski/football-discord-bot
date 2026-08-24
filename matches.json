@@ -1,2261 +1,391 @@
 {
-    "filters": {
-        "competitions": "PD",
-        "permission": "TIER_ONE",
-        "limit": 100
-    },
-    "resultSet": {
-        "count": 38,
-        "competitions": "PD",
-        "first": "2026-08-22",
-        "last": "2027-05-30",
-        "played": 0,
-        "wins": 0,
-        "draws": 38,
-        "losses": 0
-    },
-    "matches": [
+"standings": [
         {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564645,
-            "utcDate": "2026-08-22T19:30:00Z",
-            "status": "TIMED",
-            "matchday": 2,
             "stage": "REGULAR_SEASON",
+            "type": "TOTAL",
             "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 80,
-                "name": "RCD Espanyol de Barcelona",
-                "shortName": "Espanyol",
-                "tla": "ESP",
-                "crest": "https://crests.football-data.org/80.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+            "table": [
+                {
+                    "position": 1,
+                    "team": {
+                        "id": 65,
+                        "name": "Manchester City FC",
+                        "shortName": "Man City",
+                        "tla": "MCI",
+                        "crest": "https://crests.football-data.org/65.png"
+                    },
+                    "playedGames": 37,
+                    "form": "D,W,W,W,W",
+                    "won": 28,
+                    "draw": 6,
+                    "lost": 3,
+                    "points": 90,
+                    "goalsFor": 96,
+                    "goalsAgainst": 24,
+                    "goalDifference": 72
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564631,
-            "utcDate": "2026-08-26T19:00:00Z",
-            "status": "TIMED",
-            "matchday": 1,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 92,
-                "name": "Real Sociedad de Fútbol",
-                "shortName": "Real Sociedad",
-                "tla": "RSO",
-                "crest": "https://crests.football-data.org/92.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 2,
+                    "team": {
+                        "id": 64,
+                        "name": "Liverpool FC",
+                        "shortName": "Liverpool",
+                        "tla": "LIV",
+                        "crest": "https://crests.football-data.org/64.png"
+                    },
+                    "playedGames": 36,
+                    "form": "W,D,W,W,W",
+                    "won": 26,
+                    "draw": 8,
+                    "lost": 2,
+                    "points": 86,
+                    "goalsFor": 89,
+                    "goalsAgainst": 24,
+                    "goalDifference": 65
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564656,
-            "utcDate": "2026-08-30T15:00:00Z",
-            "status": "TIMED",
-            "matchday": 3,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 84,
-                "name": "Málaga CF",
-                "shortName": "Málaga",
-                "tla": "MAL",
-                "crest": "https://crests.football-data.org/84.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 3,
+                    "team": {
+                        "id": 61,
+                        "name": "Chelsea FC",
+                        "shortName": "Chelsea",
+                        "tla": "CHE",
+                        "crest": "https://crests.football-data.org/61.png"
+                    },
+                    "playedGames": 36,
+                    "form": "W,D,L,D,W",
+                    "won": 20,
+                    "draw": 10,
+                    "lost": 6,
+                    "points": 70,
+                    "goalsFor": 73,
+                    "goalsAgainst": 31,
+                    "goalDifference": 42
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564667,
-            "utcDate": "2026-09-04T19:00:00Z",
-            "status": "TIMED",
-            "matchday": 4,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 90,
-                "name": "Real Betis Balompié",
-                "shortName": "Real Betis",
-                "tla": "BET",
-                "crest": "https://crests.football-data.org/90.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 4,
+                    "team": {
+                        "id": 73,
+                        "name": "Tottenham Hotspur FC",
+                        "shortName": "Tottenham",
+                        "tla": "TOT",
+                        "crest": "https://crests.football-data.org/73.svg"
+                    },
+                    "playedGames": 37,
+                    "form": "W,W,D,W,D",
+                    "won": 21,
+                    "draw": 5,
+                    "lost": 11,
+                    "points": 68,
+                    "goalsFor": 64,
+                    "goalsAgainst": 40,
+                    "goalDifference": 24
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564677,
-            "utcDate": "2026-09-13T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 5,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 87,
-                "name": "Rayo Vallecano de Madrid",
-                "shortName": "Rayo Vallecano",
-                "tla": "RAY",
-                "crest": "https://crests.football-data.org/87.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 5,
+                    "team": {
+                        "id": 57,
+                        "name": "Arsenal FC",
+                        "shortName": "Arsenal",
+                        "tla": "ARS",
+                        "crest": "https://crests.football-data.org/57.png"
+                    },
+                    "playedGames": 37,
+                    "form": "L,L,W,W,W",
+                    "won": 21,
+                    "draw": 3,
+                    "lost": 13,
+                    "points": 66,
+                    "goalsFor": 56,
+                    "goalsAgainst": 47,
+                    "goalDifference": 9
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564681,
-            "utcDate": "2026-09-16T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 6,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 285,
-                "name": "Elche CF",
-                "shortName": "Elche",
-                "tla": "ELC",
-                "crest": "https://crests.football-data.org/285.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 6,
+                    "team": {
+                        "id": 66,
+                        "name": "Manchester United FC",
+                        "shortName": "Man United",
+                        "tla": "MUN",
+                        "crest": "https://crests.football-data.org/66.png"
+                    },
+                    "playedGames": 37,
+                    "form": "L,W,D,L,L",
+                    "won": 16,
+                    "draw": 10,
+                    "lost": 11,
+                    "points": 58,
+                    "goalsFor": 57,
+                    "goalsAgainst": 56,
+                    "goalDifference": 1
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564688,
-            "utcDate": "2026-09-20T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 7,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 78,
-                "name": "Club Atlético de Madrid",
-                "shortName": "Atleti",
-                "tla": "ATL",
-                "crest": "https://crests.football-data.org/78.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 7,
+                    "team": {
+                        "id": 563,
+                        "name": "West Ham United FC",
+                        "shortName": "West Ham",
+                        "tla": "WHU",
+                        "crest": "https://crests.football-data.org/563.png"
+                    },
+                    "playedGames": 37,
+                    "form": "D,W,L,L,D",
+                    "won": 16,
+                    "draw": 8,
+                    "lost": 13,
+                    "points": 56,
+                    "goalsFor": 59,
+                    "goalsAgainst": 48,
+                    "goalDifference": 11
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564702,
-            "utcDate": "2026-10-11T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 8,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 94,
-                "name": "Villarreal CF",
-                "shortName": "Villarreal",
-                "tla": "VIL",
-                "crest": "https://crests.football-data.org/94.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 8,
+                    "team": {
+                        "id": 76,
+                        "name": "Wolverhampton Wanderers FC",
+                        "shortName": "Wolverhampton",
+                        "tla": "WOL",
+                        "crest": "https://crests.football-data.org/76.svg"
+                    },
+                    "playedGames": 37,
+                    "form": "D,L,D,L,L",
+                    "won": 15,
+                    "draw": 6,
+                    "lost": 16,
+                    "points": 51,
+                    "goalsFor": 37,
+                    "goalsAgainst": 40,
+                    "goalDifference": -3
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564709,
-            "utcDate": "2026-10-18T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 9,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 559,
-                "name": "Sevilla FC",
-                "shortName": "Sevilla FC",
-                "tla": "SEV",
-                "crest": "https://crests.football-data.org/559.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 9,
+                    "team": {
+                        "id": 338,
+                        "name": "Leicester City FC",
+                        "shortName": "Leicester City",
+                        "tla": "LEI",
+                        "crest": "https://crests.football-data.org/338.png"
+                    },
+                    "playedGames": 36,
+                    "form": "W,W,L,L,D",
+                    "won": 13,
+                    "draw": 9,
+                    "lost": 14,
+                    "points": 48,
+                    "goalsFor": 57,
+                    "goalsAgainst": 57,
+                    "goalDifference": 0
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564723,
-            "utcDate": "2026-10-25T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 10,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 81,
-                "name": "FC Barcelona",
-                "shortName": "Barça",
-                "tla": "FCB",
-                "crest": "https://crests.football-data.org/81.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 10,
+                    "team": {
+                        "id": 397,
+                        "name": "Brighton & Hove Albion FC",
+                        "shortName": "Brighton Hove",
+                        "tla": "BHA",
+                        "crest": "https://crests.football-data.org/397.svg"
+                    },
+                    "playedGames": 37,
+                    "form": "D,W,W,D,L",
+                    "won": 11,
+                    "draw": 15,
+                    "lost": 11,
+                    "points": 48,
+                    "goalsFor": 39,
+                    "goalsAgainst": 43,
+                    "goalDifference": -4
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564734,
-            "utcDate": "2026-11-01T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 11,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 5335,
-                "name": "Real Racing Club de Santander",
-                "shortName": "Santander",
-                "tla": "SAN",
-                "crest": "https://crests.football-data.org/5335.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 11,
+                    "team": {
+                        "id": 402,
+                        "name": "Brentford FC",
+                        "shortName": "Brentford",
+                        "tla": "BRE",
+                        "crest": "https://crests.football-data.org/402.png"
+                    },
+                    "playedGames": 37,
+                    "form": "W,W,L,D,W",
+                    "won": 13,
+                    "draw": 7,
+                    "lost": 17,
+                    "points": 46,
+                    "goalsFor": 47,
+                    "goalsAgainst": 54,
+                    "goalDifference": -7
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564741,
-            "utcDate": "2026-11-08T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 12,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 95,
-                "name": "Valencia CF",
-                "shortName": "Valencia",
-                "tla": "VAL",
-                "crest": "https://crests.football-data.org/95.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 12,
+                    "team": {
+                        "id": 67,
+                        "name": "Newcastle United FC",
+                        "shortName": "Newcastle",
+                        "tla": "NEW",
+                        "crest": "https://crests.football-data.org/67.png"
+                    },
+                    "playedGames": 37,
+                    "form": "W,L,L,W,W",
+                    "won": 12,
+                    "draw": 10,
+                    "lost": 15,
+                    "points": 46,
+                    "goalsFor": 42,
+                    "goalsAgainst": 61,
+                    "goalDifference": -19
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564754,
-            "utcDate": "2026-11-22T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 13,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 558,
-                "name": "RC Celta de Vigo",
-                "shortName": "Celta",
-                "tla": "CEL",
-                "crest": "https://crests.football-data.org/558.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 13,
+                    "team": {
+                        "id": 354,
+                        "name": "Crystal Palace FC",
+                        "shortName": "Crystal Palace",
+                        "tla": "CRY",
+                        "crest": "https://crests.football-data.org/354.png"
+                    },
+                    "playedGames": 36,
+                    "form": "D,W,W,D,L",
+                    "won": 10,
+                    "draw": 15,
+                    "lost": 11,
+                    "points": 45,
+                    "goalsFor": 47,
+                    "goalsAgainst": 43,
+                    "goalDifference": 4
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564762,
-            "utcDate": "2026-11-29T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 14,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 263,
-                "name": "Deportivo Alavés",
-                "shortName": "Alavés",
-                "tla": "ALA",
-                "crest": "https://crests.football-data.org/263.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 14,
+                    "team": {
+                        "id": 58,
+                        "name": "Aston Villa FC",
+                        "shortName": "Aston Villa",
+                        "tla": "AVL",
+                        "crest": "https://crests.football-data.org/58.png"
+                    },
+                    "playedGames": 36,
+                    "form": "D,L,W,W,D",
+                    "won": 13,
+                    "draw": 5,
+                    "lost": 18,
+                    "points": 44,
+                    "goalsFor": 49,
+                    "goalsAgainst": 50,
+                    "goalDifference": -1
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564775,
-            "utcDate": "2026-12-06T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 15,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 77,
-                "name": "Athletic Club",
-                "shortName": "Athletic",
-                "tla": "ATH",
-                "crest": "https://crests.football-data.org/77.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 15,
+                    "team": {
+                        "id": 340,
+                        "name": "Southampton FC",
+                        "shortName": "Southampton",
+                        "tla": "SOU",
+                        "crest": "https://crests.football-data.org/340.png"
+                    },
+                    "playedGames": 36,
+                    "form": "L,L,D,L,W",
+                    "won": 9,
+                    "draw": 13,
+                    "lost": 14,
+                    "points": 40,
+                    "goalsFor": 41,
+                    "goalsAgainst": 61,
+                    "goalDifference": -20
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564780,
-            "utcDate": "2026-12-13T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 16,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 79,
-                "name": "CA Osasuna",
-                "shortName": "Osasuna",
-                "tla": "OSA",
-                "crest": "https://crests.football-data.org/79.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 16,
+                    "team": {
+                        "id": 62,
+                        "name": "Everton FC",
+                        "shortName": "Everton",
+                        "tla": "EVE",
+                        "crest": "https://crests.football-data.org/62.png"
+                    },
+                    "playedGames": 36,
+                    "form": "L,D,W,W,L",
+                    "won": 10,
+                    "draw": 6,
+                    "lost": 20,
+                    "points": 36,
+                    "goalsFor": 39,
+                    "goalsAgainst": 59,
+                    "goalDifference": -20
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564796,
-            "utcDate": "2026-12-20T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 17,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 560,
-                "name": "RC Deportivo La Coruña",
-                "shortName": "Deportivo",
-                "tla": "DEP",
-                "crest": "https://crests.football-data.org/560.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 17,
+                    "team": {
+                        "id": 341,
+                        "name": "Leeds United FC",
+                        "shortName": "Leeds United",
+                        "tla": "LEE",
+                        "crest": "https://crests.football-data.org/341.png"
+                    },
+                    "playedGames": 37,
+                    "form": "D,L,L,L,D",
+                    "won": 8,
+                    "draw": 11,
+                    "lost": 18,
+                    "points": 35,
+                    "goalsFor": 40,
+                    "goalsAgainst": 78,
+                    "goalDifference": -38
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564798,
-            "utcDate": "2027-01-03T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 18,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 82,
-                "name": "Getafe CF",
-                "shortName": "Getafe",
-                "tla": "GET",
-                "crest": "https://crests.football-data.org/82.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 18,
+                    "team": {
+                        "id": 328,
+                        "name": "Burnley FC",
+                        "shortName": "Burnley",
+                        "tla": "BUR",
+                        "crest": "https://crests.football-data.org/328.png"
+                    },
+                    "playedGames": 36,
+                    "form": "L,L,W,W,W",
+                    "won": 7,
+                    "draw": 13,
+                    "lost": 16,
+                    "points": 34,
+                    "goalsFor": 32,
+                    "goalsAgainst": 50,
+                    "goalDifference": -18
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564810,
-            "utcDate": "2027-01-10T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 19,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 88,
-                "name": "Levante UD",
-                "shortName": "Levante",
-                "tla": "LEV",
-                "crest": "https://crests.football-data.org/88.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 19,
+                    "team": {
+                        "id": 346,
+                        "name": "Watford FC",
+                        "shortName": "Watford",
+                        "tla": "WAT",
+                        "crest": "https://crests.football-data.org/346.svg"
+                    },
+                    "playedGames": 37,
+                    "form": "L,D,L,L,L",
+                    "won": 6,
+                    "draw": 5,
+                    "lost": 26,
+                    "points": 23,
+                    "goalsFor": 33,
+                    "goalsAgainst": 75,
+                    "goalDifference": -42
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
+                {
+                    "position": 20,
+                    "team": {
+                        "id": 68,
+                        "name": "Norwich City FC",
+                        "shortName": "Norwich",
+                        "tla": "NOR",
+                        "crest": "https://crests.football-data.org/68.png"
+                    },
+                    "playedGames": 37,
+                    "form": "D,L,L,L,L",
+                    "won": 5,
+                    "draw": 7,
+                    "lost": 25,
+                    "points": 22,
+                    "goalsFor": 23,
+                    "goalsAgainst": 79,
+                    "goalDifference": -56
                 }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564818,
-            "utcDate": "2027-01-17T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 20,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 84,
-                "name": "Málaga CF",
-                "shortName": "Málaga",
-                "tla": "MAL",
-                "crest": "https://crests.football-data.org/84.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564828,
-            "utcDate": "2027-01-24T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 21,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 90,
-                "name": "Real Betis Balompié",
-                "shortName": "Real Betis",
-                "tla": "BET",
-                "crest": "https://crests.football-data.org/90.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564839,
-            "utcDate": "2027-01-31T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 22,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 87,
-                "name": "Rayo Vallecano de Madrid",
-                "shortName": "Rayo Vallecano",
-                "tla": "RAY",
-                "crest": "https://crests.football-data.org/87.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564855,
-            "utcDate": "2027-02-07T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 23,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 92,
-                "name": "Real Sociedad de Fútbol",
-                "shortName": "Real Sociedad",
-                "tla": "RSO",
-                "crest": "https://crests.football-data.org/92.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564867,
-            "utcDate": "2027-02-14T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 24,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 77,
-                "name": "Athletic Club",
-                "shortName": "Athletic",
-                "tla": "ATH",
-                "crest": "https://crests.football-data.org/77.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564874,
-            "utcDate": "2027-02-21T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 25,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 559,
-                "name": "Sevilla FC",
-                "shortName": "Sevilla FC",
-                "tla": "SEV",
-                "crest": "https://crests.football-data.org/559.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564882,
-            "utcDate": "2027-02-28T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 26,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 95,
-                "name": "Valencia CF",
-                "shortName": "Valencia",
-                "tla": "VAL",
-                "crest": "https://crests.football-data.org/95.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564894,
-            "utcDate": "2027-03-07T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 27,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 94,
-                "name": "Villarreal CF",
-                "shortName": "Villarreal",
-                "tla": "VIL",
-                "crest": "https://crests.football-data.org/94.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564907,
-            "utcDate": "2027-03-14T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 28,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 80,
-                "name": "RCD Espanyol de Barcelona",
-                "shortName": "Espanyol",
-                "tla": "ESP",
-                "crest": "https://crests.football-data.org/80.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564911,
-            "utcDate": "2027-03-21T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 29,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 558,
-                "name": "RC Celta de Vigo",
-                "shortName": "Celta",
-                "tla": "CEL",
-                "crest": "https://crests.football-data.org/558.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564925,
-            "utcDate": "2027-04-04T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 30,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 78,
-                "name": "Club Atlético de Madrid",
-                "shortName": "Atleti",
-                "tla": "ATL",
-                "crest": "https://crests.football-data.org/78.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564936,
-            "utcDate": "2027-04-11T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 31,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 79,
-                "name": "CA Osasuna",
-                "shortName": "Osasuna",
-                "tla": "OSA",
-                "crest": "https://crests.football-data.org/79.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564947,
-            "utcDate": "2027-04-18T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 32,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 82,
-                "name": "Getafe CF",
-                "shortName": "Getafe",
-                "tla": "GET",
-                "crest": "https://crests.football-data.org/82.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564952,
-            "utcDate": "2027-04-21T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 33,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 285,
-                "name": "Elche CF",
-                "shortName": "Elche",
-                "tla": "ELC",
-                "crest": "https://crests.football-data.org/285.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564966,
-            "utcDate": "2027-05-02T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 34,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 88,
-                "name": "Levante UD",
-                "shortName": "Levante",
-                "tla": "LEV",
-                "crest": "https://crests.football-data.org/88.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564975,
-            "utcDate": "2027-05-09T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 35,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 81,
-                "name": "FC Barcelona",
-                "shortName": "Barça",
-                "tla": "FCB",
-                "crest": "https://crests.football-data.org/81.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564986,
-            "utcDate": "2027-05-16T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 36,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 5335,
-                "name": "Real Racing Club de Santander",
-                "shortName": "Santander",
-                "tla": "SAN",
-                "crest": "https://crests.football-data.org/5335.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564993,
-            "utcDate": "2027-05-23T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 37,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 263,
-                "name": "Deportivo Alavés",
-                "shortName": "Alavés",
-                "tla": "ALA",
-                "crest": "https://crests.football-data.org/263.png"
-            },
-            "awayTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
-        },
-        {
-            "area": {
-                "id": 2224,
-                "name": "Spain",
-                "code": "ESP",
-                "flag": "https://crests.football-data.org/760.svg"
-            },
-            "competition": {
-                "id": 2014,
-                "name": "Primera Division",
-                "code": "PD",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/laliga.png"
-            },
-            "season": {
-                "id": 2518,
-                "startDate": "2026-08-16",
-                "endDate": "2027-05-30",
-                "currentMatchday": 1,
-                "winner": null
-            },
-            "id": 564999,
-            "utcDate": "2027-05-30T00:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 38,
-            "stage": "REGULAR_SEASON",
-            "group": null,
-            "lastUpdated": "2026-08-10T10:20:29Z",
-            "homeTeam": {
-                "id": 86,
-                "name": "Real Madrid CF",
-                "shortName": "Real Madrid",
-                "tla": "RMA",
-                "crest": "https://crests.football-data.org/86.png"
-            },
-            "awayTeam": {
-                "id": 560,
-                "name": "RC Deportivo La Coruña",
-                "shortName": "Deportivo",
-                "tla": "DEP",
-                "crest": "https://crests.football-data.org/560.png"
-            },
-            "score": {
-                "winner": null,
-                "duration": "REGULAR",
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            },
-            "odds": {
-                "msg": "Activate Odds-Package in User-Panel to retrieve odds."
-            },
-            "referees": []
+            ]
         }
     ]
 }

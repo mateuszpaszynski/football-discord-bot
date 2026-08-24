@@ -36,9 +36,9 @@ public class FootballApiClient {
             }
         }
 
-    public JsonNode fetchRawStandings(String leagueCode) {
+    public JsonNode fetchRawStandings(String leagueId) {
         try {
-            String URI = "/v4/competitions/" + leagueCode + "/standings";
+            String URI = "/v4/competitions/" + leagueId + "/standings";
             JsonNode rootNode = restClient.get()
             .uri(URI)
             .retrieve()
@@ -48,14 +48,14 @@ public class FootballApiClient {
             return rootNode;
         
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch standings for " + leagueCode, e);
+            throw new RuntimeException("Failed to fetch standings for " + leagueId, e);
         }
     }
 
-    public JsonNode fetchRawTeams(String leagueCode) {
+    public JsonNode fetchRawTeams(String leagueId) {
 
         try {
-            String URI = "/v4/competitions/" + leagueCode + "/teams";
+            String URI = "/v4/competitions/" + leagueId + "/teams";
             JsonNode rootNode = restClient.get()
             .uri(URI)
             .retrieve()
@@ -65,7 +65,7 @@ public class FootballApiClient {
             return rootNode;
             
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch teams for " + leagueCode, e);
+            throw new RuntimeException("Failed to fetch teams for " + leagueId, e);
         }
     }    
 

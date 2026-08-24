@@ -29,8 +29,10 @@ public class ApiSyncManager {
     
     private final FootballApiClient footballApiClient;
 
+    private final RateLimitManager rateLimitManager;
+
     public ApiSyncManager(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository, 
-                         CompetitionService competitionService, FootballApiClient footballApiClient
+                         CompetitionService competitionService, FootballApiClient footballApiClient, RateLimitManager rateLimitManager
     ) {
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
@@ -40,72 +42,69 @@ public class ApiSyncManager {
         this.competitionService = competitionService;
 
         this.footballApiClient = footballApiClient;
+
+        this.rateLimitManager = rateLimitManager;
     }
 
-    public void fetchFixtures() {
-
+public void fetchFixtures() {
         List<Competition> competitions = competitionService.getCompetitions();
         for (Competition competition : competitions) {
-
             String leagueCode = competition.getCode();
+            
             try {
-
                 JsonNode matchesNode = footballApiClient.fetchRawFixtures(leagueCode);
+                rateLimitManager.apply(); 
 
                 for (JsonNode matchJson : matchesNode) {
-                
-                    JsonNode homeTeamNode = matchJson.get("homeTeam");
-                    Long homeTeamId = homeTeamNode.get("id").asLong();
-                    String homeTeamName = homeTeamNode.get("name").asText();
-                    
-                    String homeTeamShortName = homeTeamNode.hasNonNull("shortName") ? homeTeamNode.get("shortName").asText() : homeTeamName;
-                    String rawHomeTla = homeTeamNode.hasNonNull("tla") ? homeTeamNode.get("tla").asText() : "N/A";
-                    String homeTeamTla = rawHomeTla.equals("N/A") 
-                            ? homeTeamName.substring(0, Math.min(3, homeTeamName.length())).toUpperCase() 
-                            : rawHomeTla;
+                    try {
+                        if (!matchJson.hasNonNull("homeTeam") || !matchJson.get("homeTeam").hasNonNull("id") || !matchJson.get("homeTeam").hasNonNull("name") // Poprawione name
+                         || !matchJson.hasNonNull("awayTeam") || !matchJson.get("awayTeam").hasNonNull("id") || !matchJson.get("awayTeam").hasNonNull("name")
+                         || !matchJson.hasNonNull("id") || !matchJson.hasNonNull("status") 
+                         || (matchJson.get("status").asText().equals("FINISHED") && 
+                            (!matchJson.hasNonNull("score") || !matchJson.get("score").hasNonNull("fullTime") || !matchJson.get("score").get("fullTime").hasNonNull("home") || !matchJson.get("score").get("fullTime").hasNonNull("away")))
+                        ) {
+                            throw new IllegalArgumentException("Missing crucial data for match");
+                        }
 
-                    Team homeTeam = teamRepository.findById(homeTeamId)
-                        .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName, homeTeamTla)));
+                        JsonNode homeTeamNode = matchJson.get("homeTeam");
+                        Long homeTeamId = homeTeamNode.get("id").asLong();
+                        String homeTeamName = homeTeamNode.get("name").asText();
+                        String homeTeamShortName = homeTeamNode.hasNonNull("shortName") ? homeTeamNode.get("shortName").asText() : null;
+                        String homeTla = homeTeamNode.hasNonNull("tla") ? homeTeamNode.get("tla").asText() : null;
+                        Team homeTeam = teamRepository.findById(homeTeamId)
+                            .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName, homeTla)));
 
+                        JsonNode awayTeamNode = matchJson.get("awayTeam");
+                        Long awayTeamId = awayTeamNode.get("id").asLong();
+                        String awayTeamName = awayTeamNode.get("name").asText(); 
+                        String awayTeamShortName = awayTeamNode.hasNonNull("shortName") ? awayTeamNode.get("shortName").asText() : null;
+                        String awayTeamTla = awayTeamNode.hasNonNull("tla") ? awayTeamNode.get("tla").asText() : null;
+                        Team awayTeam = teamRepository.findById(awayTeamId)
+                            .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName, awayTeamShortName, awayTeamTla)));
 
-                    JsonNode awayTeamNode = matchJson.get("awayTeam");
-                    Long awayTeamId = awayTeamNode.get("id").asLong();
-                    
-                    String awayTeamName = awayTeamNode.get("name").asText(); 
-                    
-                    String awayTeamShortName = awayTeamNode.hasNonNull("shortName") ? awayTeamNode.get("shortName").asText() : awayTeamName;
-                    String rawAwayTla = awayTeamNode.hasNonNull("tla") ? awayTeamNode.get("tla").asText() : "N/A";
-                    String awayTeamTla = rawAwayTla.equals("N/A") 
-                            ? awayTeamName.substring(0, Math.min(3, awayTeamName.length())).toUpperCase() 
-                            : rawAwayTla;
-
-                    Team awayTeam = teamRepository.findById(awayTeamId)
-                        .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName, awayTeamShortName, awayTeamTla)));
-
-                    Long matchId = matchJson.get("id").asLong();
-                    String utcDate = matchJson.get("utcDate").asText();
-                    String status = matchJson.get("status").asText();
-                    JsonNode scoreNode = matchJson.get("score");
-                    String homeGoals = scoreNode.get("fullTime").get("home").asText();
-                    String awayGoals = scoreNode.get("fullTime").get("away").asText();
-                    String score = (status.equals("FINISHED")) ? (homeGoals + " - " + awayGoals) : "TBD";
-                    Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, score);
-                    
-                    matchRepository.save(match);
+                        Long matchId = matchJson.get("id").asLong();
+                        String utcDate = matchJson.get("utcDate").asText();
+                        String status = matchJson.get("status").asText();
+                        
+                        String score = "TBD";
+                        if (status.equals("FINISHED")) {
+                            JsonNode scoreNode = matchJson.get("score");
+                            String homeGoals = scoreNode.get("fullTime").get("home").asText();
+                            String awayGoals = scoreNode.get("fullTime").get("away").asText();
+                            score = homeGoals + " - " + awayGoals;
+                        }
+                        Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, score);
+                        matchRepository.save(match);
+                        
+                    } catch (Exception e) {
+                        System.err.println("Discarded match in league " + leagueCode + ": " + e.getMessage());
+                    }
                 }
-                
                 System.out.println("Saved all matches form league: " + leagueCode);
                 
             } catch (Exception e) {
-                System.err.println("Error with fetching matches for competition " + leagueCode + " cause " + e.getMessage());
-            }
-            
-            System.out.println("6.5 seconds of sleep for obeying rate limiting...");
-            try {
-                Thread.sleep(6500); 
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();    
-            }
+                System.err.println("Critical error fetching matches for competition " + leagueCode + " cause " + e.getMessage());
+            } 
         }
     }
 
@@ -118,31 +117,45 @@ public class ApiSyncManager {
             if (competition.getType().equals("LEAGUE")) {
                 
                 JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
-                
+                rateLimitManager.apply();
                 for (JsonNode standing : standingsNode) {
 
                     if (standing.get("type").asText().equals("TOTAL")) {
                         JsonNode table = standing.get("table");
                         for (JsonNode tableNode : table) {
-                            Integer position = tableNode.get("position").asInt();
-                            JsonNode teamNode = tableNode.get("team");
-                            Long teamId = teamNode.get("id").asLong();
-                            String teamName = teamNode.get("name").asText();
-                            String teamShortName = teamNode.get("shortName").asText();
-                            String teamTla = teamNode.get("tla").asText();
-                            Team team = teamRepository.findById(teamId)
-                            .orElseGet(() -> teamRepository.save(new Team(teamId, teamName, teamShortName, teamTla)));
-                            
-                            Integer playedGames = tableNode.get("playedGames").asInt();
-                            String form = tableNode.get("form").asText();
-                            Integer gamesWon = tableNode.get("won").asInt();
-                            Integer gamesDrawn = tableNode.get("draw").asInt();
-                            Integer gamesLost = tableNode.get("lost").asInt();
-                            Integer points = tableNode.get("points").asInt();
-                            Integer goalsFor = tableNode.get("goalsFor").asInt();
-                            Integer goalsAgainst = tableNode.get("goalsAgainst").asInt();
-                            Integer goalDifference = tableNode.get("goalDifference").asInt();
-                            standingRepository.save(new Standing(team,competition, position, playedGames, form, gamesWon, gamesDrawn, gamesLost, points, goalsFor, goalsAgainst, goalDifference));    
+                            try {
+                                if (!tableNode.hasNonNull("position") || !tableNode.hasNonNull("team") || !tableNode.get("team").hasNonNull("id") 
+                                || !tableNode.get("team").hasNonNull("name") || !tableNode.hasNonNull("playedGames") || !tableNode.hasNonNull("won")
+                                || !tableNode.hasNonNull("draw") || !tableNode.hasNonNull("lost") || !tableNode.hasNonNull("points") || !tableNode.hasNonNull("goalsFor")
+                                || !tableNode.hasNonNull("goalsAgainst") || !tableNode.hasNonNull("goalDifference")) 
+                                {
+                                    throw new IllegalArgumentException("Missing crucial data");
+                                }
+                                Integer position = tableNode.get("position").asInt();
+                                JsonNode teamNode = tableNode.get("team");
+                                Long teamId = teamNode.get("id").asLong();
+                                String teamName = teamNode.get("name").asText();
+                                String teamShortName = teamNode.hasNonNull("shortName") ? teamNode.get("shortName").asText() : null;
+                                String teamTla = teamNode.hasNonNull("tla") ? teamNode.get("tla").asText() : null;
+                                Team team = teamRepository.findById(teamId)
+                                .orElseGet(() -> teamRepository.save(new Team(teamId, teamName, teamShortName, teamTla)));
+                                
+                                String form = tableNode.hasNonNull("form") ? tableNode.get("form").asText() : null;
+                                
+                                Integer playedGames = tableNode.get("playedGames").asInt();
+                                Integer gamesWon = tableNode.get("won").asInt();
+                                Integer gamesDrawn = tableNode.get("draw").asInt();
+                                Integer gamesLost = tableNode.get("lost").asInt();
+                                Integer points = tableNode.get("points").asInt();
+                                Integer goalsFor = tableNode.get("goalsFor").asInt();
+                                Integer goalsAgainst = tableNode.get("goalsAgainst").asInt();
+                                Integer goalDifference = tableNode.get("goalDifference").asInt();
+                                standingRepository.save(new Standing(team,competition, position, playedGames, form, gamesWon, gamesDrawn, gamesLost, points, goalsFor, goalsAgainst, goalDifference));    
+                                    
+                            } catch (Exception e) {
+                                System.err.println("One team from league " + competition.getName() + " discarded, reason: " + e.getMessage());
+                                
+                            }
                         }
                     break;
                     }
@@ -158,32 +171,53 @@ public class ApiSyncManager {
             String compId = comp.getId().toString();
 
             JsonNode teamsNode = footballApiClient.fetchRawTeams(compId);
-
+            rateLimitManager.apply();
             for (JsonNode teamNode : teamsNode) {
+                try {
+                    if (!teamNode.hasNonNull("id") || !teamNode.hasNonNull("name")) {
+                        throw new IllegalArgumentException("Missing crucial data: ID or Name");
+                    }
+                    Long teamId = teamNode.get("id").asLong();
+                    String name = teamNode.get("name").asText();
 
-                Long teamId = teamNode.get("id").asLong();
-                String name = teamNode.get("name").asText();
-                String shortName = teamNode.get("shortName").asText();
-                String tla = teamNode.get("tla").asText();
-                Team team = new Team(teamId,name,shortName, tla);
-                teamRepository.save(team);
+                    String shortName = teamNode.hasNonNull("shortName") ? teamNode.get("shortName").asText() : null;
+                    String tla = teamNode.hasNonNull("tla") ? teamNode.get("tla").asText() : null;
+                    
+                    Team team = new Team(teamId,name,shortName, tla);
+                    teamRepository.save(team);
+                } 
+                catch (Exception e) {
+                    System.err.println("One team from league " + comp.getName() + " discarded, reason: " + e.getMessage());
+                }
             }
         }
     }    
-
     public void fetchCompetitions() {
         
         JsonNode competitionsNode = footballApiClient.fetchRawCompetitions();
-        
+        rateLimitManager.apply();
         for (JsonNode competition : competitionsNode) {
-            Long competitionId = competition.get("id").asLong();
-            String name = competition.get("name").asText();
-            String code = competition.get("code").asText();
-            String type = competition.get("type").asText();
-            JsonNode area = competition.get("area");
-            String country = area.get("name").asText();
-            Competition comp = new Competition(competitionId,name,code,type,country);
-            competitionRepository.save(comp);
+            try {
+                if (!competition.hasNonNull("id") || !competition.hasNonNull("name") ||
+                 !competition.hasNonNull("code") || !competition.hasNonNull("type") ) {
+                    throw new IllegalArgumentException("Missing crucial data: ID or Name");
+                }
+                Long competitionId = competition.get("id").asLong();
+                String name = competition.get("name").asText();
+                String code = competition.get("code").asText();
+                String type = competition.get("type").asText();
+                
+                String country = "Unknown";
+                if (competition.hasNonNull("area") && competition.get("area").hasNonNull("name")) {
+                    country = competition.get("area").get("name").asText();
+                }
+                
+                Competition comp = new Competition(competitionId, name, code, type, country);
+                competitionRepository.save(comp);
+                
+            } catch (Exception e) {
+                System.err.println("One league discarded, reason: " + e.getMessage());
+            }
         }
     }
 }

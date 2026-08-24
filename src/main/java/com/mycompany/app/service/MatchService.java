@@ -23,7 +23,6 @@ public class MatchService {
     }
 
     public List<Match> getMatches(Team team) {
-        List<Match> allMatches = matchRepository.findNextMatchesForTeam(team,PageRequest.of(0, 5));
-        return allMatches;
+        return matchRepository.findNextMatchesForTeam(team,PageRequest.of(0, 5));
     }
 }

@@ -9,11 +9,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class MyListener extends ListenerAdapter {
     
-
     private final List<BotCommand> commands;
     
     public MyListener(List<BotCommand> commands) {
