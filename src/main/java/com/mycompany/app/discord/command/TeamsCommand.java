@@ -1,6 +1,4 @@
 package com.mycompany.app.discord.command;
-
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -11,12 +9,14 @@ import com.mycompany.app.model.Competition;
 import com.mycompany.app.model.Team;
 import com.mycompany.app.service.CompetitionService;
 import com.mycompany.app.service.TeamService;
-
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 @Component
-public class TeamsCommand implements BotCommand{
+public class TeamsCommand implements BotCommand {
     
     private final CompetitionService competitionService;
     private final TeamService teamService;
@@ -26,31 +26,31 @@ public class TeamsCommand implements BotCommand{
         this.teamService = teamService;
     }
     @Override
-    public boolean supports(String command) {
-        return command.equalsIgnoreCase("!teams");
+    public String getName() {
+        return "teams";
     }
     @Override
-    public void execute(MessageReceivedEvent event) {
-        MessageChannel channel = event.getChannel();
-        String message = event.getMessage().getContentRaw();
-        
-        String[] args = message.split(" ");
-        if (args.length < 2) {
-            channel.sendMessage(ErrorFormatter.format(competitionService.getCompetitions(),
-            "**Error**: Too few arguments. You need to specify the Leauge.")).queue();
-            return;
-        }
-        String searchPhrase = String.join(" ", Arrays.copyOfRange(args, 1, args.length));;
+    public void execute(SlashCommandInteractionEvent event) {
+
+
+        OptionMapping leagueOption = event.getOption("league");
+
+        String searchPhrase = leagueOption.getAsString();
         try {
             Competition league = competitionService.getCompetition(searchPhrase);
             List<Team> teams = teamService.getTeams(league);
-            channel.sendMessage("**Teams in " + league.getName() + "**\n" + TeamFormatter.format(teams)).queue();
+            event.reply("**Teams in " + league.getName() + "**\n" + TeamFormatter.format(teams)).queue();
         }
         catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            channel.sendMessage(ErrorFormatter.format(competitionService.getCompetitions(),
+            event.reply(ErrorFormatter.format(competitionService.getCompetitions(),
             "**Error** : League '" + searchPhrase + "' not found.")).queue();
         }
     }
 
+    @Override
+    public CommandData getCommandData() {
+        return Commands.slash(getName(),"See teams for given competition")
+        .addOption(OptionType.STRING, "league", "Provide league name or code", true);
+    }
 }

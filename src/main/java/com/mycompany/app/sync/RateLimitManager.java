@@ -8,11 +8,11 @@ public class RateLimitManager {
     private int requestCount = 0;
     private long windowStartTime = 0;
     private static final int BURST_LIMIT = 10;
-    private final static int WINDOW_MS = 61000;
+    private final static long WINDOW_MS = 61000;
 
     public void apply() {
         
-        long now = System.currentTimeMillis();
+        long now = getCurrentTime();
         
         if (now - windowStartTime > WINDOW_MS) {
             requestCount = 0;
@@ -25,14 +25,20 @@ public class RateLimitManager {
             long timeToWait = WINDOW_MS - (now - windowStartTime);
             if (timeToWait > 0) {
                 try {
-                    Thread.sleep(timeToWait);
+                    sleep(timeToWait);
                 }
                 catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
             requestCount = 1;
-            windowStartTime = System.currentTimeMillis();
+            windowStartTime = getCurrentTime();
         }
+    }
+    protected long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
+    protected void sleep(long ms) throws InterruptedException {
+        Thread.sleep(ms);
     }
 }

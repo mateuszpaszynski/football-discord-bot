@@ -6,9 +6,9 @@ import java.util.List;
 import com.mycompany.app.discord.formatter.CompetitionFormatter;
 import com.mycompany.app.model.Competition;
 import com.mycompany.app.service.CompetitionService;
-
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 @Component
 public class CompetitionsCommand implements BotCommand{
@@ -20,14 +20,19 @@ public class CompetitionsCommand implements BotCommand{
     }
 
     @Override 
-    public boolean supports(String commandName) {
-        return commandName.equalsIgnoreCase("!competitions");
+    public String getName() {
+        return "competitions";
     }
     @Override 
-    public void execute(MessageReceivedEvent event) {
-        MessageChannel channel = event.getChannel();
+    public void execute(SlashCommandInteractionEvent event) {
+        
         List<Competition> comps = competitionService.getCompetitions();
-        String competitions = CompetitionFormatter.format(comps);
-        channel.sendMessage(competitions).queue();
+        
+        event.reply(CompetitionFormatter.format(comps)).queue();
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return Commands.slash(getName(), "Displays list of available competitions");
     }
 }

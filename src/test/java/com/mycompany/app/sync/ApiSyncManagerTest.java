@@ -183,7 +183,7 @@ public class ApiSyncManagerTest {
           "awayTeam": { "id": 670, "name": "SBV Excelsior" }
         }]
         """,
-        // null name all work no play makes jack a dull boy
+        // null name all work and no play makes jack a dull boy
         """
         [{
           "id": 558214, "utcDate": "2026-08-07T18:00:00Z", "status": "SCHEDULED",

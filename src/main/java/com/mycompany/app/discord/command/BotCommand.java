@@ -1,11 +1,12 @@
 package com.mycompany.app.discord.command;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 
 public interface BotCommand {
     
-    boolean supports(String command); 
-
-    void execute(MessageReceivedEvent event); 
+    String getName(); 
+    void execute(SlashCommandInteractionEvent event); 
+    CommandData getCommandData();
 }
