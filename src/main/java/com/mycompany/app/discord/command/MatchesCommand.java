@@ -48,7 +48,7 @@ public class MatchesCommand implements BotCommand {
             StringBuilder sb = new StringBuilder();
             sb.append("**Conflict!** Found multiple teams for `").append(searchPhrase).append("`:\n```\n");
             for (Team t : teams) {
-                sb.append(String.format("- %s\n", t.getShortName()));
+                sb.append(String.format("- %s\n", t.getDisplayName()));
             }
             sb.append("```\nPlease use one of the listed **names** above (e.g., `/matches query: Barca`).\n");
             event.reply(sb.toString()).setEphemeral(true).queue();
@@ -58,7 +58,7 @@ public class MatchesCommand implements BotCommand {
         if (teams.size() == 1) {
             Team team = teams.get(0);
             List<Match> matches = matchService.getMatches(team);
-            event.reply("Next 5 **" + team.getShortName() + "** matches\n\n" + MatchFormatter.format(matches)).queue();
+            event.reply("Next 5 **" + team.getDisplayName() + "** matches\n\n" + MatchFormatter.format(matches)).queue();
             return;
         }
 
@@ -69,7 +69,7 @@ public class MatchesCommand implements BotCommand {
             
         } catch (IllegalArgumentException e) {
             event.reply(ErrorFormatter.format(competitionService.getCompetitions(),
-                "**Error**: Neither Team nor League found for **'" + searchPhrase + "'**."
+                "**Error**: Neither Team nor League found for **'" + searchPhrase + "'**.\n Available Competitions: "
             )).setEphemeral(true).queue();    
         }
     }

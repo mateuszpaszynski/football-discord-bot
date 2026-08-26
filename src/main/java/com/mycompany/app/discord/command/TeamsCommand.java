@@ -42,9 +42,8 @@ public class TeamsCommand implements BotCommand {
             event.reply("**Teams in " + league.getName() + "**\n" + TeamFormatter.format(teams)).queue();
         }
         catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
             event.reply(ErrorFormatter.format(competitionService.getCompetitions(),
-            "**Error** : League '" + searchPhrase + "' not found.")).queue();
+            "**Error** : League '" + searchPhrase + "' not found.\n Available Competitions: ")).setEphemeral(true).queue();
         }
     }
 

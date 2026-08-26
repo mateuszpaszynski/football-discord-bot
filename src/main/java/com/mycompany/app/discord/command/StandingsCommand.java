@@ -29,7 +29,7 @@ public class StandingsCommand implements BotCommand{
 
     @Override
     public String getName() {
-        return ("standings");
+        return "standings";
     }
 
     @Override
@@ -41,7 +41,7 @@ public class StandingsCommand implements BotCommand{
         try {
             Competition league = competitionService.getCompetition(searchPhrase);
             List<Standing> standings = standingService.getStandings(league);
-            if ( standings.size() > 20) {
+            if (standings.size() > 20) {
                 int mid = standings.size() / 2;
                 event.reply(StandingFormatter.format(standings.subList(0, mid)))
                     .queue(v -> event.getHook().sendMessage(StandingFormatter.format(standings.subList(mid, standings.size()))).queue());
@@ -51,10 +51,9 @@ public class StandingsCommand implements BotCommand{
             }
 
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
             event.reply(ErrorFormatter.format(competitionService.getCompetitions(),
-                "**Error** : League '" + searchPhrase + "' not found."
-            )).queue();
+                "**Error** : League '" + searchPhrase + "' not found.\n Available Competitions: "
+            )).setEphemeral(true).queue();
         }
     }
 
@@ -64,4 +63,3 @@ public class StandingsCommand implements BotCommand{
         .addOption(OptionType.STRING,"league","Provide league name or code",true);
     }
 }
-
