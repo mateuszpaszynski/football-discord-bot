@@ -4,12 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.GeneratedValue;
 
 @Entity
 public class Standing {
+    
     @Id
-    @GeneratedValue
     private Long id;
     
     @ManyToOne
@@ -35,6 +34,7 @@ public class Standing {
 
     }
     public Standing(Team team, Competition competition, Integer position, Integer playedGames, String form, Integer gamesWon, Integer gamesDrawn, Integer gamesLost, Integer points, Integer goalsFor, Integer goalsAgainst, Integer goalDifference) {
+        this.id = team.getId();
         this.team = team;
         this.competition = competition;
         this.position = position;
@@ -47,6 +47,12 @@ public class Standing {
         this.goalsFor = goalsFor;
         this.goalsAgainst = goalsAgainst;
         this.goalDifference = goalDifference;
+    }
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
     public Team getTeam() {
         return this.team;

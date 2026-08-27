@@ -113,7 +113,6 @@ public void fetchFixtures() {
         List<Competition> allComps = competitionService.getCompetitions();
         
         for (Competition competition : allComps) {
-            
             if (competition.getType().equals("LEAGUE")) {
                 
                 JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
