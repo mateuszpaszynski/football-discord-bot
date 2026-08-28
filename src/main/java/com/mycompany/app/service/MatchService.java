@@ -1,5 +1,8 @@
 package com.mycompany.app.service;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.mycompany.app.model.Competition;
@@ -18,11 +21,38 @@ public class MatchService {
     public MatchService(MatchRepository matchRepository) {
         this.matchRepository = matchRepository;
     }
-    public List<Match> getMatches(Competition competition) {
+    public List<Match> getNextMatches(Competition competition) {
         return matchRepository.findNextMatchesForCompetition(competition,PageRequest.of(0,5));
     }
 
-    public List<Match> getMatches(Team team) {
+    public List<Match> getNextMatches(Team team) {
         return matchRepository.findNextMatchesForTeam(team,PageRequest.of(0, 5));
+    }
+    public List<Match> getLastMatches(Team team) {
+        return matchRepository.findLastMatchesForTeam(team,PageRequest.of(0,5));
+    }
+    public List<Match> getLastMatches(Competition comp) {
+        return matchRepository.findLastMatchesForCompetition(comp,PageRequest.of(0,5));
+    }
+    public List<Match> getTodayMatches() {
+
+        ZoneId polishZone = ZoneId.of("Europe/Warsaw");
+        LocalDate today = LocalDate.now(polishZone);
+        String startOfDayUtc = today.atStartOfDay(polishZone)
+                                .withZoneSameInstant(ZoneOffset.UTC)
+                                .format(DateTimeFormatter.ISO_INSTANT);
+        String endOfDayUtc = today.atTime(23, 59, 59).atZone(polishZone)
+                                .withZoneSameInstant(ZoneOffset.UTC)
+                                .format(DateTimeFormatter.ISO_INSTANT);
+                                
+        return matchRepository.findTodayMatches(startOfDayUtc, endOfDayUtc);
+    }
+    public List<Match> getLast24hMatches() {
+        Instant now = Instant.now();
+        Instant yesterday = now.minus(24, ChronoUnit.HOURS);
+        return matchRepository.findRecentFinishedMatches(yesterday.toString(), now.toString());
+    }
+    public List<Match> getLiveMatches() {
+        return matchRepository.findLiveMatches();
     }
 }

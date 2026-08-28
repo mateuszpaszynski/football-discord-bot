@@ -1,5 +1,6 @@
 package com.mycompany.app.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.mycompany.app.model.Competition;
@@ -7,6 +8,7 @@ import com.mycompany.app.model.Standing;
 import com.mycompany.app.model.Team;
 import com.mycompany.app.repository.TeamRepository;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,11 +34,13 @@ public class TeamService {
             if (!teamsByName.isEmpty()) return teamsByName;
 
             if (query.matches("\\d+")) {
-                return teamRepository.findById(Long.valueOf(query))
-                        .map(List::of) 
-                        .orElseThrow(() -> new IllegalArgumentException("Team ID " + query + " not found"));
+               Optional<Team> optionalTeam = teamRepository.findById(Long.valueOf(query));
+               if (optionalTeam.isEmpty()) {
+                    return Collections.emptyList();
+               }
+               return List.of(optionalTeam.get());
             }
-            throw new IllegalArgumentException("Team '" + query + "' not found");
+            return Collections.emptyList();
         }
         public List<Team> getTeams(Competition league) {
             

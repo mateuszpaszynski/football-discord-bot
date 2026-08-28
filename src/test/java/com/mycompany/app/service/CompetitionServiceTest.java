@@ -2,7 +2,6 @@ package com.mycompany.app.service;
 
 
 import com.mycompany.app.model.Competition;
-import com.mycompany.app.service.CompetitionService;
 import com.mycompany.app.repository.CompetitionRepository;
 
 import org.junit.jupiter.api.Test;

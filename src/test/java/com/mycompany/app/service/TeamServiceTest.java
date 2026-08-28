@@ -122,16 +122,14 @@ public class TeamServiceTest {
     }
 
     @Test
-    void shouldThrowWhenTeamNotFound() {
+    void shouldReturnEmptyListWhenTeamNotFound() {
   
         when(teamRepository.findByTla("M2")).thenReturn(Collections.emptyList());
         when(teamRepository.findByShortName("M2")).thenReturn(Collections.emptyList());
         when(teamRepository.findByName("M2")).thenReturn(Collections.emptyList());
         
-        assertThatThrownBy(() -> teamService.getTeam("M2"))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("M2");
-        ;
+        List<Team> teams = teamService.getTeam("M2");
+        assertThat(teams).hasSize(0);
         verify(teamRepository,times(0)).findById(anyLong());
     }
 

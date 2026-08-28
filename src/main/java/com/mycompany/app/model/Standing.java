@@ -1,6 +1,7 @@
 package com.mycompany.app.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -9,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 public class Standing {
     
     @Id
+    @GeneratedValue
     private Long id;
     
     @ManyToOne
@@ -79,7 +81,7 @@ public class Standing {
         this.playedGames = playedGames;
     }
     public String getForm() {
-        return this.form == null || this.form.equals("null") ? " - " : this.form;
+        return this.form == null || this.form.equals("null") ? "    -    " : this.form; // formatting it has to feet 9 characters
     }
     public void setForm(String form) {
         this.form = form;

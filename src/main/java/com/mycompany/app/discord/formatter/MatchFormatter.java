@@ -17,18 +17,64 @@ public class MatchFormatter {
 
             Instant matchTime = Instant.parse(match.getTime());
             long unixSeconds = matchTime.getEpochSecond();
+            
+            String status = match.getStatus();
+            String score = match.getScore();
             String discordTime = String.format("<t:%d:f>", unixSeconds);
 
-            String relativeTime = (match.getStatus().equals("TIMED")) ? String.format("<t:%d:R>", unixSeconds) : "SCHEDULED - hour **will change**"; 
-
-            
-            sb.append(String.format("🏟️ %s vs %s (%s) \n📅 %s (%s)\n\n", 
-                homeTeam.getDisplayName(), 
-                awayTeam.getDisplayName(),
-                comp.getCode(), 
-                discordTime, 
-                relativeTime
-            ));
+            String relativeTime = String.format("<t:%d:R>", unixSeconds); 
+            switch (status) {
+                case "FINISHED":
+                    sb.append(String.format("🏁 %s **%s** %s (%s) \n📅 %s \n\n", 
+                    homeTeam.getDisplayName(),
+                    score,
+                    awayTeam.getDisplayName(),
+                    comp.getCode(), 
+                    relativeTime
+                    )); 
+                    break;
+                case "SCHEDULED":
+                    sb.append(String.format("🏟️ %s vs %s (%s) \n📅 %s (%s)\n\n", 
+                    homeTeam.getDisplayName(), 
+                    awayTeam.getDisplayName(),
+                    comp.getCode(), 
+                    discordTime, 
+                    "SCHEDULED - hour **will change**"
+                    ));  
+                    break;
+                case "TIMED":
+                    sb.append(String.format("🏟️ %s vs %s (%s) \n📅 %s (%s)\n\n", 
+                    homeTeam.getDisplayName(), 
+                    awayTeam.getDisplayName(),
+                    comp.getCode(), 
+                    discordTime, 
+                    relativeTime
+                    ));     
+                    break;
+                case "LIVE":
+                case "IN_PLAY":
+                case "PAUSED":
+                    sb.append(String.format("🔴 **LIVE**\n🏟️ %s **%s** %s (%s) \n⏱️ Start: %s\n\n", 
+                    homeTeam.getDisplayName(),
+                    score,
+                    awayTeam.getDisplayName(),
+                    comp.getCode(), 
+                    relativeTime 
+                    )); 
+                    break;
+                case "POSTPONED":
+                case "SUSPENDED":
+                case "CANCELLED":
+                    break;
+                    
+                default:
+                    sb.append(String.format("❓ %s vs %s (%s) - Status: %s\n\n", 
+                        homeTeam.getDisplayName(), 
+                        awayTeam.getDisplayName(),
+                        comp.getCode(),
+                        status
+                    )); 
+            }
         }
 
         return sb.toString();

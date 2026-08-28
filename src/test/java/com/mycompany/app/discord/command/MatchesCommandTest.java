@@ -4,10 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +25,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
-@ExtendWith (MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class MatchesCommandTest {
 
     @Mock
@@ -74,11 +72,12 @@ public class MatchesCommandTest {
         match.setId(100L);
         match.setStatus("TIMED");
         
-        when(event.getOption(anyString())).thenReturn(optionMapping);
+        when(event.getSubcommandName()).thenReturn("next");
+        when(event.getOption("query")).thenReturn(optionMapping);
         when(optionMapping.getAsString()).thenReturn("Real Madrid");
         when(teamService.getTeam("Real Madrid")).thenReturn(List.of(team1));
         
-        when(matchService.getMatches(team1)).thenReturn(List.of(match));
+        when(matchService.getNextMatches(team1)).thenReturn(List.of(match));
         when(event.reply(anyString())).thenReturn(replyAction);
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
@@ -90,16 +89,16 @@ public class MatchesCommandTest {
         
         String message = captor.getValue();
 
-        assertThat(message).contains("t:1786125600:f") //Epoch of  2026-08-07T18:00:00Z"
-        .doesNotContain("Premier League")
-        .contains("PL")
-        .contains("Real Madrid")
-        .contains("FC Barcelona")
-        .doesNotContain("null");
+        assertThat(message).contains("t:1786125600:f") // Epoch of  2026-08-07T18:00:00Z
+                .doesNotContain("Premier League")
+                .contains("PL")
+                .contains("Real Madrid")
+                .contains("FC Barcelona")
+                .doesNotContain("null");
     }
+
     @Test
     void shouldReplyWithAvaibleTeamsWithCollision() {
-        
         Competition comp = new Competition();
         comp.setId(1L);
         comp.setCode("PL");
@@ -115,17 +114,10 @@ public class MatchesCommandTest {
         team2.setName("FC Barcelona");
         team2.setTla("FCB");
 
-        Match match = new Match();
-        match.setCompetition(comp);
-        match.setHomeTeam(team1);
-        match.setAwayTeam(team2);
-        match.setTime("2026-08-07T18:00:00Z");
-        match.setId(100L);
-        match.setStatus("TIMED");
-        
-        when(event.getOption(anyString())).thenReturn(optionMapping);
+        when(event.getSubcommandName()).thenReturn("next");
+        when(event.getOption("query")).thenReturn(optionMapping);
         when(optionMapping.getAsString()).thenReturn("FCB");
-        when(teamService.getTeam("FCB")).thenReturn(List.of(team1,team2));
+        when(teamService.getTeam("FCB")).thenReturn(List.of(team1, team2));
         
         when(event.reply(anyString())).thenReturn(replyAction);
         when(replyAction.setEphemeral(true)).thenReturn(replyAction);
@@ -139,13 +131,14 @@ public class MatchesCommandTest {
         
         String message = captor.getValue();
 
-        assertThat(message).doesNotContain("t:1786125600:f") // epoch of 2026-08-07T18:00:00Z
-        .contains("**Conflict!** Found multiple teams for `")
-        .contains("FCB")
-        .contains("Bayern Monachium")
-        .contains("FC Barcelona")
-        .doesNotContain("null");
+        assertThat(message).doesNotContain("t:1786125600:f")
+                .contains("**Conflict!** Found multiple teams for `")
+                .contains("FCB")
+                .contains("Bayern Monachium")
+                .contains("FC Barcelona")
+                .doesNotContain("null");
     }
+
     @Test
     void shouldReplyWithFormattedMatchesForCompetition() {
         Competition comp = new Competition();
@@ -169,11 +162,13 @@ public class MatchesCommandTest {
         match.setId(100L);
         match.setStatus("TIMED");
         
-        when(event.getOption(anyString())).thenReturn(optionMapping);
+        when(event.getSubcommandName()).thenReturn("next");
+        when(event.getOption("query")).thenReturn(optionMapping);
         when(optionMapping.getAsString()).thenReturn("PL");
         when(teamService.getTeam("PL")).thenReturn(Collections.emptyList());
         when(competitionService.getCompetition("PL")).thenReturn(comp);
-        when(matchService.getMatches(comp)).thenReturn(List.of(match));
+        
+        when(matchService.getNextMatches(comp)).thenReturn(List.of(match));
         when(event.reply(anyString())).thenReturn(replyAction);
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
@@ -185,12 +180,12 @@ public class MatchesCommandTest {
         
         String message = captor.getValue();
 
-        assertThat(message).contains("t:1786125600:f") // epoch of 2026-08-07T18:00:00Z
-        .contains("Premier League")
-        .contains("PL")
-        .contains("Real Madrid")
-        .contains("FC Barcelona")
-        .doesNotContain("null");
+        assertThat(message).contains("t:1786125600:f")
+                .contains("Premier League")
+                .contains("PL")
+                .contains("Real Madrid")
+                .contains("FC Barcelona")
+                .doesNotContain("null");
     }
 
     @Test
@@ -205,12 +200,13 @@ public class MatchesCommandTest {
         comp2.setCode("PD");
         comp2.setName("Primera Division");
 
-
-        when(event.getOption(anyString())).thenReturn(optionMapping);
+        when(event.getSubcommandName()).thenReturn("next");
+        when(event.getOption("query")).thenReturn(optionMapping);
         when(optionMapping.getAsString()).thenReturn("BB");
         when(teamService.getTeam("BB")).thenReturn(Collections.emptyList());
-        when(competitionService.getCompetition("BB")).thenThrow(new IllegalArgumentException("League '" + "BB" + "' not found"));
-        when(competitionService.getCompetitions()).thenReturn(List.of(comp1,comp2));
+        when(competitionService.getCompetition("BB")).thenThrow(new IllegalArgumentException("League 'BB' not found"));
+        when(competitionService.getCompetitions()).thenReturn(List.of(comp1, comp2));
+        
         when(event.reply(anyString())).thenReturn(replyAction);
         when(replyAction.setEphemeral(true)).thenReturn(replyAction);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
@@ -222,14 +218,132 @@ public class MatchesCommandTest {
         
         String message = captor.getValue();
 
-        assertThat(message).contains(" Neither Team nor League found for")
-        .contains("Available Competitions: ")
-        .contains("BB")
-        .contains("Premier League")
-        .contains("PL")
-        .contains("Primera Division")
-        .contains("PD")
-        .doesNotContain("null");
+        assertThat(message).contains("Neither Team nor League found for")
+                .contains("Available Competitions: ")
+                .contains("BB")
+                .contains("Premier League")
+                .contains("PL")
+                .contains("Primera Division")
+                .contains("PD")
+                .doesNotContain("null");
     }
 
+    @Test
+    void shouldReplyWithTodayMatchesWhenQueryIsAnyForNext() {
+        when(event.getSubcommandName()).thenReturn("next");
+        when(event.getOption("query")).thenReturn(null); // Brak argumentu = domyślnie "any"
+        
+        when(matchService.getTodayMatches()).thenReturn(Collections.emptyList());
+        when(event.reply(anyString())).thenReturn(replyAction);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        command.execute(event);
+
+        verify(event).reply(captor.capture());
+        verify(replyAction).queue();
+        
+        assertThat(captor.getValue()).contains("Today's matches");
+    }
+
+    @Test
+    void shouldReplyWithLast24hMatchesWhenQueryIsAnyForLast() {
+        when(event.getSubcommandName()).thenReturn("last");
+        when(event.getOption("query")).thenReturn(null);
+        
+        Match dummyMatch = new Match();
+        dummyMatch.setStatus("FINISHED");
+        dummyMatch.setHomeTeam(new Team());
+        dummyMatch.setAwayTeam(new Team());
+        dummyMatch.setCompetition(new Competition());
+        dummyMatch.setTime("2026-08-07T18:00:00Z"); // Potrzebne do formatera
+
+        when(matchService.getLast24hMatches()).thenReturn(List.of(dummyMatch));
+        when(event.reply(anyString())).thenReturn(replyAction);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        command.execute(event);
+
+        verify(event).reply(captor.capture());
+        verify(replyAction).queue();
+        
+        assertThat(captor.getValue()).contains("Matches finished in the **last 24 hours**");
+    }
+
+    @Test
+    void shouldReplyWithEmptyMessageForLast24hIfNoMatches() {
+        when(event.getSubcommandName()).thenReturn("last");
+        when(event.getOption("query")).thenReturn(null);
+        
+        when(matchService.getLast24hMatches()).thenReturn(Collections.emptyList());
+        when(event.reply(anyString())).thenReturn(replyAction);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        command.execute(event);
+
+        verify(event).reply(captor.capture());
+        verify(replyAction).queue();
+        
+        assertThat(captor.getValue()).contains("No matches finished in the **last 24 hours**");
+    }
+
+    @Test
+    void shouldReplyWithLiveMatches() {
+        when(event.getSubcommandName()).thenReturn("live");
+        
+        Match dummyMatch = new Match();
+        dummyMatch.setStatus("LIVE");
+        dummyMatch.setHomeTeam(new Team());
+        dummyMatch.setAwayTeam(new Team());
+        dummyMatch.setCompetition(new Competition());
+        dummyMatch.setTime("2026-08-07T18:00:00Z");
+
+        when(matchService.getLiveMatches()).thenReturn(List.of(dummyMatch));
+        when(event.reply(anyString())).thenReturn(replyAction);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        command.execute(event);
+
+        verify(event).reply(captor.capture());
+        verify(replyAction).queue();
+        
+        assertThat(captor.getValue()).contains("Live matches:");
+    }
+
+    @Test
+    void shouldReplyWithNoLiveMatchesMessageIfEmpty() {
+        when(event.getSubcommandName()).thenReturn("live");
+        
+        when(matchService.getLiveMatches()).thenReturn(Collections.emptyList());
+        when(event.reply(anyString())).thenReturn(replyAction);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        command.execute(event);
+
+        verify(event).reply(captor.capture());
+        verify(replyAction).queue();
+        
+        assertThat(captor.getValue()).contains("No matches are live right now");
+    }
+
+    @Test
+    void shouldAskForSubcommandWhenNull() {
+        when(event.getSubcommandName()).thenReturn(null);
+        
+        when(event.reply(anyString())).thenReturn(replyAction);
+        when(replyAction.setEphemeral(true)).thenReturn(replyAction);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        command.execute(event);
+
+        verify(event).reply(captor.capture());
+        verify(replyAction).queue();
+        
+        assertThat(captor.getValue()).contains("Choose from (next/last/live)");
+    }
 }

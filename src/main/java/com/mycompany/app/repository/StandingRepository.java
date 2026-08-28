@@ -1,6 +1,7 @@
 package com.mycompany.app.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.mycompany.app.model.Competition;
 import com.mycompany.app.model.Standing;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface StandingRepository extends JpaRepository<Standing,Long>{
     List<Standing> findByCompetitionOrderByPositionAsc(Competition competition);
 
-    // Nowa metoda do czyszczenia bazy przed updatem
+    Optional<Standing> findByTeamIdAndCompetitionId(Long teamId, Long competitionId);
+    
     @Transactional
     void deleteByCompetition(Competition competition);
 }

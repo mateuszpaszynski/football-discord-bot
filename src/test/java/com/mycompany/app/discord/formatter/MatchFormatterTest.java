@@ -15,7 +15,7 @@ import java.util.Collections;
 public class MatchFormatterTest {
     
     @Test
-    void shouldFormatMatchesScheduledListCorrectly() {
+    void shouldFormatScheduledMatchesCorrectly() {
        Team team1 = new Team();
         team1.setId(1L);
         team1.setName("Real Madrid CF");
@@ -55,8 +55,8 @@ public class MatchFormatterTest {
         .doesNotContain("null");
     }
 
-        @Test
-    void shouldFormatMatchesTimedListCorrectly() {
+    @Test
+    void shouldFormatTimedMatchesCorrectly() {
        Team team1 = new Team();
         team1.setId(1L);
         team1.setName("Real Madrid CF");
@@ -96,6 +96,90 @@ public class MatchFormatterTest {
         .doesNotContain("hour").doesNotContain("will").doesNotContain("change")
         .doesNotContain("null");
     }
+    @Test
+    void shouldFormatLiveMatchesCorrectly() {
+        Team team1 = new Team();
+        team1.setId(1L);
+        team1.setName("Real Madrid CF");
+        team1.setShortName("Real Madrid");
+        team1.setTla("RMA");
+
+        Team team2 = new Team();
+        team2.setId(2L);
+        team2.setName("FC Barcelona");
+        team2.setShortName(null);
+        team2.setTla(null);
+        
+        Competition comp = new Competition();
+        comp.setName("Primera Division");
+        comp.setCode("PD");
+
+        Match match = new Match();
+
+        match.setHomeTeam(team1);
+        match.setAwayTeam(team2);
+        match.setCompetition(comp);
+        match.setStatus("LIVE");
+        match.setTime("2026-08-22T19:30:00Z");
+        match.setScore("3 - 1");
+        List<Match> matches = List.of(match);
+
+        String result = MatchFormatter.format(matches);
+        assertThat(result)
+        .contains("Real Madrid")
+        .doesNotContain("Real Madrid CF")
+        .contains("FC Barcelona")
+        .contains("PD")
+        .doesNotContain("Primera Division")
+        .contains("LIVE")
+        .contains("3 - 1")
+        .doesNotContain("2026-08-22T19:30:00Z")
+        .doesNotContain("hour").doesNotContain("will").doesNotContain("change")
+        .doesNotContain("null");
+    }
+
+    @Test
+    void shouldFormatFinishedMatchesCorrectly() {
+        Team team1 = new Team();
+        team1.setId(1L);
+        team1.setName("Real Madrid CF");
+        team1.setShortName("Real Madrid");
+        team1.setTla("RMA");
+
+        Team team2 = new Team();
+        team2.setId(2L);
+        team2.setName("FC Barcelona");
+        team2.setShortName(null);
+        team2.setTla(null);
+        
+        Competition comp = new Competition();
+        comp.setName("Primera Division");
+        comp.setCode("PD");
+
+        Match match = new Match();
+
+        match.setHomeTeam(team1);
+        match.setAwayTeam(team2);
+        match.setCompetition(comp);
+        match.setStatus("FINISHED");
+        match.setTime("2026-08-22T19:30:00Z");
+        match.setScore("8 - 2");
+        List<Match> matches = List.of(match);
+
+        String result = MatchFormatter.format(matches);
+        assertThat(result)
+        .contains("Real Madrid")
+        .doesNotContain("Real Madrid CF")
+        .contains("FC Barcelona")
+        .contains("PD")
+        .doesNotContain("Primera Division")
+        .doesNotContain("LIVE")
+        .contains("8 - 2")
+        .doesNotContain("2026-08-22T19:30:00Z")
+        .doesNotContain("hour").doesNotContain("will").doesNotContain("change")
+        .doesNotContain("null");
+    }
+
 
     @Test
     void shouldHandleEmptyListWithoutCrashing() {

@@ -87,7 +87,7 @@ public void fetchFixtures() {
                         String status = matchJson.get("status").asText();
                         
                         String score = "TBD";
-                        if (status.equals("FINISHED")) {
+                        if (status.equals("FINISHED") || status.equals("LIVE") || status.equals("PAUSED") || status.equals("IN_PLAY")) {
                             JsonNode scoreNode = matchJson.get("score");
                             String homeGoals = scoreNode.get("fullTime").get("home").asText();
                             String awayGoals = scoreNode.get("fullTime").get("away").asText();
@@ -149,7 +149,23 @@ public void fetchFixtures() {
                                 Integer goalsFor = tableNode.get("goalsFor").asInt();
                                 Integer goalsAgainst = tableNode.get("goalsAgainst").asInt();
                                 Integer goalDifference = tableNode.get("goalDifference").asInt();
-                                standingRepository.save(new Standing(team,competition, position, playedGames, form, gamesWon, gamesDrawn, gamesLost, points, goalsFor, goalsAgainst, goalDifference));    
+
+                                Standing existingStanding = standingRepository.findByTeamIdAndCompetitionId(teamId, competition.getId())
+                                .orElse(new Standing());
+
+                                existingStanding.setTeam(team);
+                                existingStanding.setCompetition(competition);
+                                existingStanding.setPosition(position);
+                                existingStanding.setPlayedGames(playedGames);
+                                existingStanding.setForm(form);
+                                existingStanding.setGamesWon(gamesWon);
+                                existingStanding.setGamesDrawn(gamesDrawn);
+                                existingStanding.setGamesLost(gamesLost);
+                                existingStanding.setPoints(points);
+                                existingStanding.setGoalsFor(goalsFor);
+                                existingStanding.setGoalsAgainst(goalsAgainst);
+                                existingStanding.setGoalDifference(goalDifference);
+                                standingRepository.save(existingStanding);    
                                     
                             } catch (Exception e) {
                                 System.err.println("One team from league " + competition.getName() + " discarded, reason: " + e.getMessage());

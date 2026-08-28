@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.mycompany.app.repository.StandingRepository;
 import com.mycompany.app.model.Competition;
 import com.mycompany.app.model.Standing;
 import com.mycompany.app.model.Team;
@@ -24,7 +23,6 @@ import com.mycompany.app.service.StandingService;
 import net.dv8tion.jda.api.entities.Message;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
