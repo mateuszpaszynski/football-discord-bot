@@ -1,5 +1,7 @@
 package com.mycompany.app.sync;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class ApiSyncManager {
         this.rateLimitManager = rateLimitManager;
     }
 
-public void fetchFixtures() {
+    public void fetchFixtures() {
         List<Competition> competitions = competitionService.getCompetitions();
         for (Competition competition : competitions) {
             String leagueCode = competition.getCode();
@@ -55,51 +57,72 @@ public void fetchFixtures() {
                 JsonNode matchesNode = footballApiClient.fetchRawFixtures(leagueCode);
                 rateLimitManager.apply(); 
 
-                for (JsonNode matchJson : matchesNode) {
-                    try {
-                        if (!matchJson.hasNonNull("homeTeam") || !matchJson.get("homeTeam").hasNonNull("id") || !matchJson.get("homeTeam").hasNonNull("name") // Poprawione name
-                         || !matchJson.hasNonNull("awayTeam") || !matchJson.get("awayTeam").hasNonNull("id") || !matchJson.get("awayTeam").hasNonNull("name")
-                         || !matchJson.hasNonNull("id") || !matchJson.hasNonNull("status") 
-                         || (matchJson.get("status").asText().equals("FINISHED") && 
-                            (!matchJson.hasNonNull("score") || !matchJson.get("score").hasNonNull("fullTime") || !matchJson.get("score").get("fullTime").hasNonNull("home") || !matchJson.get("score").get("fullTime").hasNonNull("away")))
-                        ) {
-                            throw new IllegalArgumentException("Missing crucial data for match");
+            for (JsonNode matchJson : matchesNode) {
+                try {
+                   
+                    if (!matchJson.hasNonNull("homeTeam") || !matchJson.get("homeTeam").hasNonNull("id") || !matchJson.get("homeTeam").hasNonNull("name") 
+                    || !matchJson.hasNonNull("awayTeam") || !matchJson.get("awayTeam").hasNonNull("id") || !matchJson.get("awayTeam").hasNonNull("name")
+                    || !matchJson.hasNonNull("id") || !matchJson.hasNonNull("status")) {
+                        throw new IllegalArgumentException("Missing crucial data for match");
+                    }
+
+                    JsonNode homeTeamNode = matchJson.get("homeTeam");
+                    Long homeTeamId = homeTeamNode.get("id").asLong();
+                    String homeTeamName = homeTeamNode.get("name").asText();
+                    String homeTeamShortName = homeTeamNode.hasNonNull("shortName") ? homeTeamNode.get("shortName").asText() : null;
+                    String homeTla = homeTeamNode.hasNonNull("tla") ? homeTeamNode.get("tla").asText() : null;
+                    Team homeTeam = teamRepository.findById(homeTeamId)
+                        .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName, homeTla)));
+
+                    JsonNode awayTeamNode = matchJson.get("awayTeam");
+                    Long awayTeamId = awayTeamNode.get("id").asLong();
+                    String awayTeamName = awayTeamNode.get("name").asText(); 
+                    String awayTeamShortName = awayTeamNode.hasNonNull("shortName") ? awayTeamNode.get("shortName").asText() : null;
+                    String awayTeamTla = awayTeamNode.hasNonNull("tla") ? awayTeamNode.get("tla").asText() : null;
+                    Team awayTeam = teamRepository.findById(awayTeamId)
+                        .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName, awayTeamShortName, awayTeamTla)));
+
+                    Long matchId = matchJson.get("id").asLong();
+                    String utcDate = matchJson.get("utcDate").asText();
+                    String status = matchJson.get("status").asText();
+
+                    // status sometimes arrives broken for certain leagues;
+                    if (status.matches(".*\\d+.*")) {
+                        status = "TIMED"; 
+                    }
+
+                   
+                    Instant matchTime = Instant.parse(utcDate);
+                    Instant now = Instant.now();
+
+                    if (status.equals("TIMED") || status.equals("SCHEDULED")) {
+                        if (now.isAfter(matchTime.plus(2, ChronoUnit.HOURS))) {
+                            status = "FINISHED"; // 2hours ago probably ended
+                        } else if (now.isAfter(matchTime)) {
+                            status = "IN_PLAY"; // started but not enough time passed so we guess its in play
                         }
-
-                        JsonNode homeTeamNode = matchJson.get("homeTeam");
-                        Long homeTeamId = homeTeamNode.get("id").asLong();
-                        String homeTeamName = homeTeamNode.get("name").asText();
-                        String homeTeamShortName = homeTeamNode.hasNonNull("shortName") ? homeTeamNode.get("shortName").asText() : null;
-                        String homeTla = homeTeamNode.hasNonNull("tla") ? homeTeamNode.get("tla").asText() : null;
-                        Team homeTeam = teamRepository.findById(homeTeamId)
-                            .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName, homeTla)));
-
-                        JsonNode awayTeamNode = matchJson.get("awayTeam");
-                        Long awayTeamId = awayTeamNode.get("id").asLong();
-                        String awayTeamName = awayTeamNode.get("name").asText(); 
-                        String awayTeamShortName = awayTeamNode.hasNonNull("shortName") ? awayTeamNode.get("shortName").asText() : null;
-                        String awayTeamTla = awayTeamNode.hasNonNull("tla") ? awayTeamNode.get("tla").asText() : null;
-                        Team awayTeam = teamRepository.findById(awayTeamId)
-                            .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName, awayTeamShortName, awayTeamTla)));
-
-                        Long matchId = matchJson.get("id").asLong();
-                        String utcDate = matchJson.get("utcDate").asText();
-                        String status = matchJson.get("status").asText();
-                        
-                        String score = "TBD";
-                        if (status.equals("FINISHED") || status.equals("LIVE") || status.equals("PAUSED") || status.equals("IN_PLAY")) {
-                            JsonNode scoreNode = matchJson.get("score");
+                    }
+                    String score = "TBD";
+                    
+                    
+                    if (status.equals("FINISHED") || status.equals("LIVE") || status.equals("PAUSED") || status.equals("IN_PLAY")) {
+                        JsonNode scoreNode = matchJson.get("score");
+                        if (scoreNode != null && scoreNode.hasNonNull("fullTime") && 
+                            scoreNode.get("fullTime").hasNonNull("home") && scoreNode.get("fullTime").hasNonNull("away")) {
+                            
                             String homeGoals = scoreNode.get("fullTime").get("home").asText();
                             String awayGoals = scoreNode.get("fullTime").get("away").asText();
                             score = homeGoals + " - " + awayGoals;
                         }
-                        Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, score);
-                        matchRepository.save(match);
-                        
-                    } catch (Exception e) {
-                        System.err.println("Discarded match in league " + leagueCode + ": " + e.getMessage());
                     }
+                    
+                    Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, score);
+                    matchRepository.save(match);
+                    
+                } catch (Exception e) {
+                    System.err.println("Discarded match in league " + leagueCode + ": " + e.getMessage());
                 }
+            }
                 System.out.println("Saved all matches form league: " + leagueCode);
                 
             } catch (Exception e) {

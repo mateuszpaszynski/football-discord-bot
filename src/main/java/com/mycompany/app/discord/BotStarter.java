@@ -33,8 +33,8 @@ public class BotStarter implements CommandLineRunner {
             apiSyncManager.fetchCompetitions();
             apiSyncManager.fetchTeams();
             apiSyncManager.fetchStandings();
-            apiSyncManager.fetchFixtures();
         }
+        apiSyncManager.fetchFixtures();
         JDA api = JDABuilder.createDefault(botToken)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .addEventListeners(myListener)

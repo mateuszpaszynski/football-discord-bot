@@ -154,7 +154,7 @@ public class MatchesCommand implements BotCommand {
         if (formattedMatches.length() > 2000) {
             formattedMatches = formattedMatches.substring(0, 1990) + "...";
         }
-        event.reply("**🔴 Live matches:**\n\n" + formattedMatches).queue();
+        event.reply("**🔴 Live matches:**\n\n" + formattedMatches + "\n\n**Note**: Matches' scores visible here are **not** automatically refreshed, if you want to see the actual scores you have to type the command again").queue();
     }
 
     @Override

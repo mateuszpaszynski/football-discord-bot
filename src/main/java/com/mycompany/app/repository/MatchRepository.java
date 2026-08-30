@@ -12,18 +12,24 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Long> {
-   //List<Match> findByAwayTeam(Team team);
-   @Query("SELECT m from Match m where (m.status = 'TIMED' OR m.status = 'SCHEDULED') and (m.homeTeam = :team OR m.awayTeam = :team) ORDER BY m.time ASC")
-   List<Match> findNextMatchesForTeam(@Param("team") Team team, Pageable pageable);
 
-   @Query("SELECT m from Match m where (m.status = 'TIMED' or m.status = 'SCHEDULED') and m.competition = :competition ORDER BY m.time ASC")
-   List<Match> findNextMatchesForCompetition(@Param("competition") Competition competition, Pageable pageable);
+   @Query("SELECT m FROM Match m WHERE (m.homeTeam = :team OR m.awayTeam = :team) " +
+         "AND m.status IN ('SCHEDULED', 'TIMED') " +
+         "AND m.time >= :now " +
+         "ORDER BY m.time ASC")
+   List<Match> findNextMatchesForTeam(@Param("team") Team team, Pageable pageable, @Param("now") String now);
 
-   @Query("SELECT m from Match m where m.status = 'FINISHED' and (m.homeTeam = :team OR m.awayTeam = :team) ORDER BY m.time DESC")
-   List<Match> findLastMatchesForTeam(@Param("team") Team team, Pageable pageable);
+   @Query("SELECT m FROM Match m WHERE m.competition = :comp " +
+         "AND m.status IN ('SCHEDULED', 'TIMED') " +
+         "AND m.time >= :now " +
+         "ORDER BY m.time ASC")
+   List<Match> findNextMatchesForCompetition(@Param("comp") Competition comp, Pageable pageable, @Param("now") String now);
 
-   @Query("SELECT m from Match m where m.status = 'FINISHED' and m.competition = :competition ORDER BY m.time DESC")
-   List<Match> findLastMatchesForCompetition(@Param("competition") Competition competition, Pageable pageable);
+   @Query("SELECT m FROM Match m WHERE (m.status = 'FINISHED' OR (m.status IN ('TIMED', 'SCHEDULED') AND m.time < :twoHoursAgo)) AND (m.homeTeam = :team OR m.awayTeam = :team) ORDER BY m.time DESC")
+   List<Match> findLastMatchesForTeam(@Param("team") Team team, Pageable pageable, @Param("twoHoursAgo") String twoHoursAgo);
+
+   @Query("SELECT m FROM Match m WHERE (m.status = 'FINISHED' OR (m.status IN ('TIMED', 'SCHEDULED') AND m.time < :twoHoursAgo)) AND m.competition = :competition ORDER BY m.time DESC")
+   List<Match> findLastMatchesForCompetition(@Param("competition") Competition competition, Pageable pageable, @Param("twoHoursAgo") String twoHoursAgo);
 
    @Query("SELECT m FROM Match m WHERE m.status IN ('TIMED', 'SCHEDULED') AND m.time >= :startOfDay AND m.time <= :endOfDay ORDER BY m.time ASC")
    List<Match> findTodayMatches(@Param("startOfDay") String startOfDay, @Param("endOfDay") String endOfDay);

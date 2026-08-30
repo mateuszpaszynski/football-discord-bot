@@ -14,7 +14,7 @@ public class FootballApiClient {
 
     private final RestClient restClient;
 
-    public FootballApiClient(    @Value("${football.api}") String footballApi) {
+    public FootballApiClient(@Value("${football.api}") String footballApi) {
         this.restClient = RestClient.builder()
             .baseUrl(BASE_URL)
             .defaultHeader(HEADER, footballApi)

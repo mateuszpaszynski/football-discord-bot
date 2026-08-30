@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +32,7 @@ public class MatchServiceTest {
 
     @InjectMocks
     private MatchService matchService;
+    
     @Test
     void shouldReturnNextMatchesForCompetition() {
         Competition comp = new Competition();
@@ -42,15 +45,16 @@ public class MatchServiceTest {
 
         List<Match> mockMatches = List.of(match1, match2);
 
-        when(matchRepository.findNextMatchesForCompetition(comp, PageRequest.of(0, 5)))
+        when(matchRepository.findNextMatchesForCompetition(eq(comp), eq(PageRequest.of(0, 5)), anyString()))
                 .thenReturn(mockMatches);
 
         List<Match> result = matchService.getNextMatches(comp);
 
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getId()).isEqualTo(1L);
-        verify(matchRepository, times(1)).findNextMatchesForCompetition(comp, PageRequest.of(0, 5));
+        verify(matchRepository, times(1)).findNextMatchesForCompetition(eq(comp), eq(PageRequest.of(0, 5)), anyString());
     }
+
     @Test
     void shouldReturnNextMatchesForTeam() {
         Team team = new Team();
@@ -61,7 +65,7 @@ public class MatchServiceTest {
 
         List<Match> mockMatches = List.of(match1);
 
-        when(matchRepository.findNextMatchesForTeam(team, PageRequest.of(0, 5)))
+        when(matchRepository.findNextMatchesForTeam(eq(team), eq(PageRequest.of(0, 5)), anyString()))
                 .thenReturn(mockMatches);
 
         List<Match> result = matchService.getNextMatches(team);
@@ -69,7 +73,7 @@ public class MatchServiceTest {
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId()).isEqualTo(99L);
 
-        verify(matchRepository, times(1)).findNextMatchesForTeam(team, PageRequest.of(0, 5));
+        verify(matchRepository, times(1)).findNextMatchesForTeam(eq(team), eq(PageRequest.of(0, 5)), anyString());
     }
 
     @Test
@@ -82,14 +86,14 @@ public class MatchServiceTest {
 
         List<Match> mockMatches = List.of(match1);
 
-        when(matchRepository.findLastMatchesForTeam(team, PageRequest.of(0, 5)))
+        when(matchRepository.findLastMatchesForTeam(eq(team), eq(PageRequest.of(0, 5)), anyString()))
                 .thenReturn(mockMatches);
 
         List<Match> result = matchService.getLastMatches(team);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId()).isEqualTo(99L);
-        verify(matchRepository, times(1)).findLastMatchesForTeam(team, PageRequest.of(0, 5));
+        verify(matchRepository, times(1)).findLastMatchesForTeam(eq(team), eq(PageRequest.of(0, 5)), anyString());
     }
     @Test
     void shouldReturnLastMatchesForCompetition() {
@@ -103,14 +107,14 @@ public class MatchServiceTest {
 
         List<Match> mockMatches = List.of(match1, match2);
 
-        when(matchRepository.findLastMatchesForCompetition(comp, PageRequest.of(0, 5)))
+        when(matchRepository.findLastMatchesForCompetition(eq(comp), eq(PageRequest.of(0, 5)), anyString()))
                 .thenReturn(mockMatches);
 
         List<Match> result = matchService.getLastMatches(comp);
 
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getId()).isEqualTo(1L);
-        verify(matchRepository, times(1)).findLastMatchesForCompetition(comp, PageRequest.of(0, 5));
+        verify(matchRepository, times(1)).findLastMatchesForCompetition(eq(comp), eq(PageRequest.of(0, 5)), anyString());
     }
     @Test
     void shouldReturnLiveMatches() {

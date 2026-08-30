@@ -21,18 +21,23 @@ public class MatchService {
     public MatchService(MatchRepository matchRepository) {
         this.matchRepository = matchRepository;
     }
-    public List<Match> getNextMatches(Competition competition) {
-        return matchRepository.findNextMatchesForCompetition(competition,PageRequest.of(0,5));
+    public List<Match> getNextMatches(Team team) {
+        String now = Instant.now().toString();
+        return matchRepository.findNextMatchesForTeam(team,PageRequest.of(0,5), now);
     }
 
-    public List<Match> getNextMatches(Team team) {
-        return matchRepository.findNextMatchesForTeam(team,PageRequest.of(0, 5));
+    public List<Match> getNextMatches(Competition comp) {
+        String now = Instant.now().toString();
+        return matchRepository.findNextMatchesForCompetition(comp,PageRequest.of(0,5), now);
     }
     public List<Match> getLastMatches(Team team) {
-        return matchRepository.findLastMatchesForTeam(team,PageRequest.of(0,5));
+        String twoHoursAgo = Instant.now().minus(2, ChronoUnit.HOURS).toString();
+        return matchRepository.findLastMatchesForTeam(team, PageRequest.of(0, 5), twoHoursAgo);
     }
+
     public List<Match> getLastMatches(Competition comp) {
-        return matchRepository.findLastMatchesForCompetition(comp,PageRequest.of(0,5));
+        String twoHoursAgo = Instant.now().minus(2, ChronoUnit.HOURS).toString();
+        return matchRepository.findLastMatchesForCompetition(comp, PageRequest.of(0, 5), twoHoursAgo);
     }
     public List<Match> getTodayMatches() {
 
