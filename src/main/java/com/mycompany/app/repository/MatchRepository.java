@@ -1,5 +1,6 @@
 package com.mycompany.app.repository;
 
+import java.time.Instant;
 import java.util.List;
 import com.mycompany.app.model.Team;
 import com.mycompany.app.model.Match;
@@ -39,4 +40,10 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
 
    @Query("SELECT m FROM Match m WHERE m.status IN ('LIVE', 'IN_PLAY', 'PAUSED') ORDER BY m.time ASC")
    List<Match> findLiveMatches();
+
+   @Query("SELECT m FROM Match m WHERE " +
+      "(m.time >= :timeWindowStart AND m.time <= :now AND m.status NOT IN ('FINISHED', 'POSTPONED', 'CANCELLED', 'SUSPENDED')) " +
+      "OR m.status IN ('IN_PLAY', 'LIVE', 'PAUSED')")
+   List<Match> findMatchesThatShouldBeLive(@Param("timeWindowStart") String timeWindowStart, @Param("now") String now);
+
 }

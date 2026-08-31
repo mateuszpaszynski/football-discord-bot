@@ -82,9 +82,8 @@ public class MatchFormatter {
             }
         }
         if (!lastUpdated.isEmpty()) {
-            sb.append("\nPlease note that the API provides result with 5 minut delay\n**Last update with API: " + lastUpdated + "**");
+            sb.append("Please note that the API provides result with 5 minut delay\n**Last update with API: " + lastUpdated + "**");
         }
-
         return sb.toString();
     }    
 }

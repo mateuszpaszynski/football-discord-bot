@@ -20,6 +20,19 @@ public class FootballApiClient {
             .defaultHeader(HEADER, footballApi)
             .build();
     }
+    public JsonNode fetchRawFixturesForToday(String leagueCodes) {
+        try {
+            String URI = "v4/matches?competitions=" + leagueCodes.substring(0, leagueCodes.length() - 1); // to cut the last comma
+            JsonNode rootNode = restClient.get()
+            .uri(URI)
+            .retrieve()
+            .body(JsonNode.class)
+            .get("matches");
+            return rootNode;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch fixtures for today", e);
+        }
+    }
     public JsonNode fetchRawFixtures(String leagueCode) {
         try {
             String URI = "/v4/competitions/" + leagueCode + "/matches";

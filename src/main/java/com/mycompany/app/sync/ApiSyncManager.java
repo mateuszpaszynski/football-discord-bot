@@ -2,6 +2,7 @@ package com.mycompany.app.sync;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.mycompany.app.repository.MatchRepository;
 import com.mycompany.app.repository.StandingRepository;
 import com.mycompany.app.repository.TeamRepository;
 import com.mycompany.app.service.CompetitionService;
+import com.mycompany.app.service.MatchService;
 
 @Service
 public class ApiSyncManager {
@@ -28,13 +30,13 @@ public class ApiSyncManager {
     private final StandingRepository standingRepository;
     
     private final CompetitionService competitionService;
-    
+    private final MatchService matchService;
     private final FootballApiClient footballApiClient;
 
     private final RateLimitManager rateLimitManager;
 
     public ApiSyncManager(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository, 
-                         CompetitionService competitionService, FootballApiClient footballApiClient, RateLimitManager rateLimitManager
+                         CompetitionService competitionService, MatchService matchService, FootballApiClient footballApiClient, RateLimitManager rateLimitManager
     ) {
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
@@ -42,20 +44,109 @@ public class ApiSyncManager {
         this.standingRepository = standingRepository;
 
         this.competitionService = competitionService;
-
+        this.matchService = matchService;
         this.footballApiClient = footballApiClient;
 
         this.rateLimitManager = rateLimitManager;
     }
+    public void fetchFixturesForToday() {
+        List<Match> matches = matchService.getMatchesThatShouldBeLive();
+        if (matches.isEmpty()) {
+            return;
+        }
+        HashSet<String> leagueCodes = new HashSet<>();
+        for (Match match : matches) {
+            leagueCodes.add(match.getCompetition().getCode());
+        }
+        StringBuilder query = new StringBuilder();
+        for (String leagueCode : leagueCodes) {
+            query.append(leagueCode + ",");
+        }
+        try {
+            rateLimitManager.apply();
+            JsonNode matchesNode = footballApiClient.fetchRawFixturesForToday(query.toString());
+            for (JsonNode matchJson : matchesNode) {
+                try {
+                    if (!matchJson.hasNonNull("competition") || !matchJson.get("competition").hasNonNull("id")  || !matchJson.hasNonNull("homeTeam") || !matchJson.get("homeTeam").hasNonNull("id") || !matchJson.get("homeTeam").hasNonNull("name") 
+                    || !matchJson.hasNonNull("awayTeam") || !matchJson.get("awayTeam").hasNonNull("id") || !matchJson.get("awayTeam").hasNonNull("name")
+                    || !matchJson.hasNonNull("id") || !matchJson.hasNonNull("status")) {
+                        throw new IllegalArgumentException("Missing crucial data for match");
+                    }
+                    Long competitionId = matchJson.get("competition").get("id").asLong();
+                    Competition competition = competitionRepository.findById(competitionId).orElseThrow(() -> new IllegalArgumentException("cannot decipher league")); // this cannot happen as we fetch only from what we have in db but you know how it is
+                    Instant lastUpdated = null;
+                    if (matchJson.hasNonNull("lastUpdated")) {
+                        lastUpdated = Instant.parse(matchJson.get("lastUpdated").asText());
+                    }
+                    JsonNode homeTeamNode = matchJson.get("homeTeam");
+                    Long homeTeamId = homeTeamNode.get("id").asLong();
+                    String homeTeamName = homeTeamNode.get("name").asText();
+                    String homeTeamShortName = homeTeamNode.hasNonNull("shortName") ? homeTeamNode.get("shortName").asText() : null;
+                    String homeTla = homeTeamNode.hasNonNull("tla") ? homeTeamNode.get("tla").asText() : null;
+                    Team homeTeam = teamRepository.findById(homeTeamId)
+                        .orElseGet(() -> teamRepository.save(new Team(homeTeamId, homeTeamName, homeTeamShortName, homeTla)));
 
+                    JsonNode awayTeamNode = matchJson.get("awayTeam");
+                    Long awayTeamId = awayTeamNode.get("id").asLong();
+                    String awayTeamName = awayTeamNode.get("name").asText(); 
+                    String awayTeamShortName = awayTeamNode.hasNonNull("shortName") ? awayTeamNode.get("shortName").asText() : null;
+                    String awayTeamTla = awayTeamNode.hasNonNull("tla") ? awayTeamNode.get("tla").asText() : null;
+                    Team awayTeam = teamRepository.findById(awayTeamId)
+                        .orElseGet(() -> teamRepository.save(new Team(awayTeamId, awayTeamName, awayTeamShortName, awayTeamTla)));
+
+                    Long matchId = matchJson.get("id").asLong();
+                    String utcDate = matchJson.get("utcDate").asText();
+                    String status = matchJson.get("status").asText();
+
+                    // status sometimes arrives broken for certain leagues;
+                    if (status.matches(".*\\d+.*")) {
+                        status = "TIMED"; 
+                    }
+
+
+                    Instant matchTime = Instant.parse(utcDate);
+                    Instant now = Instant.now();
+
+                    if (now.isAfter(matchTime.plus(2, ChronoUnit.HOURS))) {
+                        status = "FINISHED"; // 2hours ago probably ended
+                    } else if (now.isAfter(matchTime)) {
+                        status = "IN_PLAY"; // started but not enough time passed so we guess its in play
+                    }
+                    
+                    String score = "TBD";
+                    
+                    
+                    if (status.equals("FINISHED") || status.equals("LIVE") || status.equals("PAUSED") || status.equals("IN_PLAY")) {
+                        JsonNode scoreNode = matchJson.get("score");
+                        if (scoreNode != null && scoreNode.hasNonNull("fullTime") && 
+                            scoreNode.get("fullTime").hasNonNull("home") && scoreNode.get("fullTime").hasNonNull("away")) {
+                            
+                            String homeGoals = scoreNode.get("fullTime").get("home").asText();
+                            String awayGoals = scoreNode.get("fullTime").get("away").asText();
+                            score = homeGoals + " - " + awayGoals;
+                        }
+                    }
+                    
+                    Match match = new Match(matchId, competition, lastUpdated, utcDate, status, homeTeam, awayTeam, score);
+                    matchRepository.save(match);
+                    
+                } catch (Exception e) {
+                    System.err.println("Discarded match: " + e.getMessage());
+                }
+            }
+
+        } catch (Exception e) {
+                System.err.println("Critical error fetching matches for today " + e.getMessage());
+            } 
+    }
     public void fetchFixtures() {
         List<Competition> competitions = competitionService.getCompetitions();
         for (Competition competition : competitions) {
             String leagueCode = competition.getCode();
             
             try {
-                JsonNode matchesNode = footballApiClient.fetchRawFixtures(leagueCode);
                 rateLimitManager.apply(); 
+                JsonNode matchesNode = footballApiClient.fetchRawFixtures(leagueCode);
 
             for (JsonNode matchJson : matchesNode) {
                 try {
@@ -94,7 +185,7 @@ public class ApiSyncManager {
                         status = "TIMED"; 
                     }
 
-                   
+
                     Instant matchTime = Instant.parse(utcDate);
                     Instant now = Instant.now();
 
@@ -140,8 +231,8 @@ public class ApiSyncManager {
         for (Competition competition : allComps) {
             if (competition.getType().equals("LEAGUE")) {
                 
-                JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
                 rateLimitManager.apply();
+                JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
                 for (JsonNode standing : standingsNode) {
 
                     if (standing.get("type").asText().equals("TOTAL")) {
@@ -210,8 +301,8 @@ public class ApiSyncManager {
         for (Competition comp : allComps) {
             String compId = comp.getId().toString();
 
-            JsonNode teamsNode = footballApiClient.fetchRawTeams(compId);
             rateLimitManager.apply();
+            JsonNode teamsNode = footballApiClient.fetchRawTeams(compId);
             for (JsonNode teamNode : teamsNode) {
                 try {
                     if (!teamNode.hasNonNull("id") || !teamNode.hasNonNull("name")) {
@@ -234,8 +325,8 @@ public class ApiSyncManager {
     }    
     public void fetchCompetitions() {
         
-        JsonNode competitionsNode = footballApiClient.fetchRawCompetitions();
         rateLimitManager.apply();
+        JsonNode competitionsNode = footballApiClient.fetchRawCompetitions();
         for (JsonNode competition : competitionsNode) {
             try {
                 if (!competition.hasNonNull("id") || !competition.hasNonNull("name") ||

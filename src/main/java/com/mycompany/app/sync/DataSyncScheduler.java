@@ -3,6 +3,7 @@ package com.mycompany.app.sync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class DataSyncScheduler {
     
@@ -11,16 +12,17 @@ public class DataSyncScheduler {
         this.apiSyncManager = apiSyncManager;
     }
 
-    @Scheduled(cron = "0 0 * * * *") 
-    public void scheduleHourlySync()    
+    @Scheduled(cron = "0 * * * * *") 
+    public void pollLiveMatches()    
     {
-        apiSyncManager.fetchFixtures(); 
-        apiSyncManager.fetchStandings();
+        apiSyncManager.fetchFixturesForToday();
     }
 
-    @Scheduled(cron = "0 0 3 1 * *")
-    public void scheduleMonthlySync() {
-        apiSyncManager.fetchTeams();
+    @Scheduled(cron = "0 0 5 * * *")
+    public void scheduleDailySync() {
         apiSyncManager.fetchCompetitions();
+        apiSyncManager.fetchTeams();
+        apiSyncManager.fetchStandings();
+        apiSyncManager.fetchFixtures();
     }
 }

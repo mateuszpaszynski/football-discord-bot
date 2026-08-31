@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,7 @@ import com.mycompany.app.repository.MatchRepository;
 import com.mycompany.app.repository.StandingRepository;
 import com.mycompany.app.repository.TeamRepository;
 import com.mycompany.app.service.CompetitionService;
+import com.mycompany.app.service.MatchService;
 
 
 @ExtendWith (MockitoExtension.class)
@@ -55,6 +57,9 @@ public class ApiSyncManagerTest {
     CompetitionService competitionService;
     
     @Mock
+    MatchService matchService;
+
+    @Mock
     RateLimitManager rateLimitManager;
 
     @InjectMocks
@@ -63,9 +68,130 @@ public class ApiSyncManagerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void shouldFetchFixturesWithFullData() throws Exception{
+    void shouldBulkFetchFixturesWithFullData() throws Exception {
+        //region
+    String apiResponse = """
+    [
+    {
+      "area": {
+        "id": 2163,
+        "name": "Netherlands",
+        "code": "NLD",
+        "flag": "https://crests.football-data.org/8601.svg"
+      },
+      "competition": {
+        "id": 2003,
+        "name": "Eredivisie",
+        "code": "DED",
+        "type": "LEAGUE",
+        "emblem": "https://crests.football-data.org/ED.png"
+      },
+      "season": {
+        "id": 2493,
+        "startDate": "2026-08-07",
+        "endDate": "2027-05-23",
+        "currentMatchday": 3,
+        "winner": null
+      },
+      "id": 558214,
+      "utcDate": "2026-08-07T18:00:00Z",
+      "status": "FINISHED",
+      "matchday": 1,
+      "stage": "REGULAR_SEASON",
+      "group": null,
+      "lastUpdated": "2026-08-24T05:20:35Z",
+      "homeTeam": {
+        "id": 1909,
+        "name": "SC Cambuur-Leeuwarden",
+        "shortName": "Cambuur",
+        "tla": "CAM",
+        "crest": "https://crests.football-data.org/1909.png"
+      },
+      "awayTeam": {
+        "id": 670,
+        "name": "SBV Excelsior",
+        "shortName": "Excelsior",
+        "tla": "EXC",
+        "crest": "https://crests.football-data.org/670.png"
+      },
+      "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
+        "fullTime": {
+          "home": 0,
+          "away": 4
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 3
+        }
+      },
+      "odds": {
+        "msg": "Activate Odds-Package in User-Panel to retrieve odds."
+      },
+      "referees": [
+        {
+          "id": 9561,
+          "name": "Allard Lindhout",
+          "type": "REFEREE",
+          "nationality": "Netherlands"
+        }
+      ]
+    }]          
+    """;
+       //endregion
+       Competition comp = new Competition();
+       comp.setId(2003L);
+       comp.setName("Eredivisie");
+       comp.setCode("DED");
+       when(competitionRepository.findById(2003L)).thenReturn(Optional.of(comp));
+
+       JsonNode mockJsonNode = objectMapper.readTree(apiResponse);
+       Team hTeam = new Team();
+       hTeam.setId(1909L);
+       hTeam.setName("SC Cambuur-Leeuwarden");
+
+       Team aTeam = new Team();
+       aTeam.setId(670L);
+       aTeam.setName("SBV Excelsior");
+       Match m = new Match();
+       m.setHomeTeam(hTeam);
+       m.setAwayTeam(aTeam);
+       m.setCompetition(comp);
+       m.setId(7L);
+
+       when(matchService.getMatchesThatShouldBeLive()).thenReturn(List.of(m));
+       when(footballApiClient.fetchRawFixturesForToday("DED,")).thenReturn(mockJsonNode);
+       when(teamRepository.findById(1909L)).thenReturn(Optional.of(hTeam));
+       when(teamRepository.findById(670L)).thenReturn(Optional.of(aTeam));
+       
+       apiSyncManager.fetchFixturesForToday();
+       
+       ArgumentCaptor<Match> captor = ArgumentCaptor.forClass(Match.class);
+       verify(matchRepository,times(1)).save(captor.capture());
+
+       Match match = captor.getValue();
+       Team homeTeam = match.getHomeTeam();
+       Team awayTeam = match.getAwayTeam();
+       assertThat(homeTeam.getName()).isEqualTo("SC Cambuur-Leeuwarden");
+       assertThat(homeTeam.getId()).isEqualTo(1909L);
+       assertThat(awayTeam.getName()).isEqualTo("SBV Excelsior");
+       assertThat(awayTeam.getId()).isEqualTo(670L);
+       assertThat(match.getId()).isEqualTo(558214L);
+       assertThat(match.getCompetition()).isEqualTo(comp);
+       assertThat(match.getTime()).isEqualTo("2026-08-07T18:00:00Z");
+       assertThat(match.getScore()).isEqualTo("0 - 4");
+    }
+    @Test
+    void shouldDiscardBulkFetchingWhenNoMatchIsLive() throws Exception {
+        when(matchService.getMatchesThatShouldBeLive()).thenReturn(Collections.emptyList());
+        apiSyncManager.fetchFixturesForToday();
+        verify(matchRepository, never()).save(any(Match.class));
+    }
+    @Test
+    void shouldFetchFixturesWithFullData() throws Exception {
        //region
-       String apiResponse = """
+    String apiResponse = """
     [
     {
       "area": {

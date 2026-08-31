@@ -60,4 +60,9 @@ public class MatchService {
     public List<Match> getLiveMatches() {
         return matchRepository.findLiveMatches();
     }
+    public List<Match> getMatchesThatShouldBeLive() {
+        Instant now = Instant.now();
+        Instant timeWindowStart = now.minus(150, ChronoUnit.MINUTES); // 2.5h for extra times
+        return matchRepository.findMatchesThatShouldBeLive(timeWindowStart.toString(), now.toString());
+    }
 }
