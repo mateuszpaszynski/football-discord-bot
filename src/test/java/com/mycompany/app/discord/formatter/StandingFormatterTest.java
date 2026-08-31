@@ -7,6 +7,7 @@ import com.mycompany.app.model.Team;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.time.Instant;
 import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +33,6 @@ public class StandingFormatterTest {
         standing.setForm(null);
         standing.setCompetition(comp1);
         standing.setTeam(team);
-
         List<Standing> listOfStandings = List.of(standing);
         String result = StandingFormatter.format(listOfStandings);
         
@@ -52,7 +52,6 @@ public class StandingFormatterTest {
             .doesNotContain("Real Madrid CF")
             .doesNotContain("Premier League") // we split table into two messages so we dont add header inside formatter
             .doesNotContain("RMA")
-            .endsWith("```")
             .doesNotContain("null");
     }
     @Test
@@ -73,7 +72,6 @@ public class StandingFormatterTest {
             .contains("GD")
             .contains("Pts")
             .contains("Last 5")
-            .endsWith("```")
             .doesNotContain("null");
     }
 

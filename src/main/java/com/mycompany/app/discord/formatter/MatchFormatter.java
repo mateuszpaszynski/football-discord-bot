@@ -9,8 +9,10 @@ import com.mycompany.app.model.Competition;
 public class MatchFormatter {
     public static String format(List<Match> matches) {
         StringBuilder sb = new StringBuilder();
+        String lastUpdated = "";
         
         for (Match match : matches) {
+            
             Team homeTeam = match.getHomeTeam();
             Team awayTeam = match.getAwayTeam();
             Competition comp = match.getCompetition();
@@ -19,6 +21,9 @@ public class MatchFormatter {
             long unixSeconds = matchTime.getEpochSecond();
             
             String status = match.getStatus();
+            if (status.equals("LIVE") || status.equals("PAUSED") || status.equals("IN_PLAY")) {
+                lastUpdated = String.format("<t:%d:R>", match.getLastUpdated().getEpochSecond());
+            }
             String score = match.getScore();
             String discordTime = String.format("<t:%d:f>", unixSeconds);
 
@@ -75,6 +80,9 @@ public class MatchFormatter {
                         status
                     )); 
             }
+        }
+        if (!lastUpdated.isEmpty()) {
+            sb.append("\nPlease note that the API provides result with 5 minut delay\n**Last update with API: " + lastUpdated + "**");
         }
 
         return sb.toString();

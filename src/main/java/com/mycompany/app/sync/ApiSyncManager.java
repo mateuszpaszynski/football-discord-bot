@@ -65,7 +65,10 @@ public class ApiSyncManager {
                     || !matchJson.hasNonNull("id") || !matchJson.hasNonNull("status")) {
                         throw new IllegalArgumentException("Missing crucial data for match");
                     }
-
+                    Instant lastUpdated = null;
+                    if (matchJson.hasNonNull("lastUpdated")) {
+                        lastUpdated = Instant.parse(matchJson.get("lastUpdated").asText());
+                    }
                     JsonNode homeTeamNode = matchJson.get("homeTeam");
                     Long homeTeamId = homeTeamNode.get("id").asLong();
                     String homeTeamName = homeTeamNode.get("name").asText();
@@ -95,13 +98,12 @@ public class ApiSyncManager {
                     Instant matchTime = Instant.parse(utcDate);
                     Instant now = Instant.now();
 
-                    if (status.equals("TIMED") || status.equals("SCHEDULED")) {
-                        if (now.isAfter(matchTime.plus(2, ChronoUnit.HOURS))) {
-                            status = "FINISHED"; // 2hours ago probably ended
-                        } else if (now.isAfter(matchTime)) {
-                            status = "IN_PLAY"; // started but not enough time passed so we guess its in play
-                        }
+                    if (now.isAfter(matchTime.plus(2, ChronoUnit.HOURS))) {
+                        status = "FINISHED"; // 2hours ago probably ended
+                    } else if (now.isAfter(matchTime)) {
+                        status = "IN_PLAY"; // started but not enough time passed so we guess its in play
                     }
+                    
                     String score = "TBD";
                     
                     
@@ -116,7 +118,7 @@ public class ApiSyncManager {
                         }
                     }
                     
-                    Match match = new Match(matchId, competition, utcDate, status, homeTeam, awayTeam, score);
+                    Match match = new Match(matchId, competition, lastUpdated, utcDate, status, homeTeam, awayTeam, score);
                     matchRepository.save(match);
                     
                 } catch (Exception e) {
@@ -164,6 +166,7 @@ public class ApiSyncManager {
                                 
                                 String form = tableNode.hasNonNull("form") ? tableNode.get("form").asText() : null;
                                 
+                                
                                 Integer playedGames = tableNode.get("playedGames").asInt();
                                 Integer gamesWon = tableNode.get("won").asInt();
                                 Integer gamesDrawn = tableNode.get("draw").asInt();
@@ -175,7 +178,6 @@ public class ApiSyncManager {
 
                                 Standing existingStanding = standingRepository.findByTeamIdAndCompetitionId(teamId, competition.getId())
                                 .orElse(new Standing());
-
                                 existingStanding.setTeam(team);
                                 existingStanding.setCompetition(competition);
                                 existingStanding.setPosition(position);

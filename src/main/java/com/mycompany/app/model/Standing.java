@@ -1,5 +1,8 @@
 package com.mycompany.app.model;
 
+import java.time.Instant;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -35,7 +38,7 @@ public class Standing {
     public Standing() {
 
     }
-    public Standing(Team team, Competition competition, Integer position, Integer playedGames, String form, Integer gamesWon, Integer gamesDrawn, Integer gamesLost, Integer points, Integer goalsFor, Integer goalsAgainst, Integer goalDifference) {
+    public Standing(Team team, Competition competition, Instant lastUpdated, Integer position, Integer playedGames, String form, Integer gamesWon, Integer gamesDrawn, Integer gamesLost, Integer points, Integer goalsFor, Integer goalsAgainst, Integer goalDifference) {
         this.id = team.getId();
         this.team = team;
         this.competition = competition;

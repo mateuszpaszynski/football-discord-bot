@@ -1,5 +1,7 @@
 package com.mycompany.app.model;
 
+import java.time.Instant;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -12,6 +14,7 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "competition_id")
     private Competition competition;
+    private Instant lastUpdated;
     private String time;
     private String status;
 
@@ -28,9 +31,10 @@ public class Match {
     public Match() {
 
     }
-    public Match(Long id, Competition competition, String time, String status, Team homeTeam, Team awayTeam, String score) {
+    public Match(Long id, Competition competition,Instant lastUpdated, String time, String status, Team homeTeam, Team awayTeam, String score) {
        this.id = id;
        this.competition = competition;
+       this.lastUpdated = lastUpdated;
        this.time = time;
        this.status = status;
        this.homeTeam = homeTeam;
@@ -49,7 +53,12 @@ public class Match {
     public void setCompetition(Competition competitionId) {
         this.competition = competitionId;
     }
-
+        public Instant getLastUpdated() {
+        return this.lastUpdated;
+    }
+    public void setLastUpdated(Instant lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
     public String getTime() {
         return this.time;
     }

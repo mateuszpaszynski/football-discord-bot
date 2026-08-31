@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -299,10 +300,10 @@ public class MatchesCommandTest {
         dummyMatch.setAwayTeam(new Team());
         dummyMatch.setCompetition(new Competition());
         dummyMatch.setTime("2026-08-07T18:00:00Z");
-
+        dummyMatch.setLastUpdated(Instant.parse("2026-08-07T18:00:00Z"));
         when(matchService.getLiveMatches()).thenReturn(List.of(dummyMatch));
         when(event.reply(anyString())).thenReturn(replyAction);
-
+        
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 
         command.execute(event);

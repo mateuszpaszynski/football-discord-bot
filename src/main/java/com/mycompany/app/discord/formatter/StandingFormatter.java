@@ -25,8 +25,10 @@ public class StandingFormatter {
                     standing.getPoints(),
                     standing.getForm()
             ));
+            
         }
         sb.append("```");
+        sb.append("*Note: The API provider may take a few hours to update standings after matches finish.*");
         return sb.toString();
     }
 

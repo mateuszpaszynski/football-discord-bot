@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.mycompany.app.repository.CompetitionRepository;
 import com.mycompany.app.sync.ApiSyncManager;
+import com.mycompany.app.sync.RateLimitManager;
 
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
@@ -32,9 +33,9 @@ public class BotStarter implements CommandLineRunner {
         if (competitionRepository.count() == 0) {
             apiSyncManager.fetchCompetitions();
             apiSyncManager.fetchTeams();
-            apiSyncManager.fetchStandings();
         }
         apiSyncManager.fetchFixtures();
+        apiSyncManager.fetchStandings();
         JDA api = JDABuilder.createDefault(botToken)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .addEventListeners(myListener)
