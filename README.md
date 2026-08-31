@@ -9,6 +9,8 @@ Made by a football fan for football fans.
 - football-data.org
 - junit & mockito for tests
 
+## Known limitations
+- Some competitions, including EURO, World Cup and Champions League, may provide incomplete or delayed data depending on the external API.
 
 ## Features: 
 - **/matches live** - Displays currently live matches
