@@ -1,0 +1,51 @@
+package pl.mateuszpaszynski.footballtracker.repository;
+
+import java.time.Instant;
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import pl.mateuszpaszynski.footballtracker.model.Competition;
+import pl.mateuszpaszynski.footballtracker.model.Match;
+import pl.mateuszpaszynski.footballtracker.model.Team;
+
+@Repository
+public interface MatchRepository extends JpaRepository<Match, Long> {
+
+   @Query("SELECT m FROM Match m WHERE (m.homeTeam = :team OR m.awayTeam = :team) " +
+         "AND m.status IN ('SCHEDULED', 'TIMED') " +
+         "AND m.time >= :now " +
+         "ORDER BY m.time ASC")
+   List<Match> findNextMatchesForTeam(@Param("team") Team team, Pageable pageable, @Param("now") String now);
+
+   @Query("SELECT m FROM Match m WHERE m.competition = :comp " +
+         "AND m.status IN ('SCHEDULED', 'TIMED') " +
+         "AND m.time >= :now " +
+         "ORDER BY m.time ASC")
+   List<Match> findNextMatchesForCompetition(@Param("comp") Competition comp, Pageable pageable, @Param("now") String now);
+
+   @Query("SELECT m FROM Match m WHERE (m.status = 'FINISHED' OR (m.status IN ('TIMED', 'SCHEDULED') AND m.time < :twoHoursAgo)) AND (m.homeTeam = :team OR m.awayTeam = :team) ORDER BY m.time DESC")
+   List<Match> findLastMatchesForTeam(@Param("team") Team team, Pageable pageable, @Param("twoHoursAgo") String twoHoursAgo);
+
+   @Query("SELECT m FROM Match m WHERE (m.status = 'FINISHED' OR (m.status IN ('TIMED', 'SCHEDULED') AND m.time < :twoHoursAgo)) AND m.competition = :competition ORDER BY m.time DESC")
+   List<Match> findLastMatchesForCompetition(@Param("competition") Competition competition, Pageable pageable, @Param("twoHoursAgo") String twoHoursAgo);
+
+   @Query("SELECT m FROM Match m WHERE m.status IN ('TIMED', 'SCHEDULED') AND m.time >= :startOfDay AND m.time <= :endOfDay ORDER BY m.time ASC")
+   List<Match> findTodayMatches(@Param("startOfDay") String startOfDay, @Param("endOfDay") String endOfDay);
+
+   @Query("SELECT m FROM Match m WHERE m.status = 'FINISHED' AND m.time >= :yesterday AND m.time <= :now ORDER BY m.time DESC LIMIT 15")
+   List<Match> findRecentFinishedMatches(@Param("yesterday") String yesterday, @Param("now") String now);
+
+   @Query("SELECT m FROM Match m WHERE m.status IN ('LIVE', 'IN_PLAY', 'PAUSED') ORDER BY m.time ASC")
+   List<Match> findLiveMatches();
+
+   @Query("SELECT m FROM Match m WHERE " +
+      "(m.time >= :timeWindowStart AND m.time <= :now AND m.status NOT IN ('FINISHED', 'POSTPONED', 'CANCELLED', 'SUSPENDED')) " +
+      "OR m.status IN ('IN_PLAY', 'LIVE', 'PAUSED')")
+   List<Match> findMatchesThatShouldBeLive(@Param("timeWindowStart") String timeWindowStart, @Param("now") String now);
+
+}

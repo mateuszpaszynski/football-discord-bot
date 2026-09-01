@@ -1,0 +1,139 @@
+package pl.mateuszpaszynski.footballtracker.model;
+
+import java.time.Instant;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
+public class Standing {
+    
+    @Id
+    @GeneratedValue
+    private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    @ManyToOne
+    @JoinColumn(name = "competition_id")
+    private Competition competition;
+
+    private Integer position;
+    private Integer playedGames;
+    private String form;
+    private Integer gamesWon;
+    private Integer gamesDrawn;
+    private Integer gamesLost;
+    private Integer points;
+    private Integer goalsFor;
+    private Integer goalsAgainst;
+    private Integer goalDifference;
+    
+    public Standing() {
+
+    }
+    public Standing(Team team, Competition competition, Instant lastUpdated, Integer position, Integer playedGames, String form, Integer gamesWon, Integer gamesDrawn, Integer gamesLost, Integer points, Integer goalsFor, Integer goalsAgainst, Integer goalDifference) {
+        this.team = team;
+        this.competition = competition;
+        this.position = position;
+        this.playedGames = playedGames;
+        this.form = form;
+        this.gamesWon = gamesWon;
+        this.gamesDrawn = gamesDrawn;
+        this.gamesLost = gamesLost;
+        this.points = points;
+        this.goalsFor = goalsFor;
+        this.goalsAgainst = goalsAgainst;
+        this.goalDifference = goalDifference;
+    }
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Team getTeam() {
+        return this.team;
+    }
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+    public Competition getCompetition() {
+        return this.competition;
+    }
+    public void setCompetition(Competition competition) {
+        this.competition = competition;
+    }
+    public Integer getPosition() {
+        return this.position == null ? 0 : this.position;
+    }
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+    public Integer getPlayedGames() {
+        return this.playedGames == null ? 0 : this.playedGames;
+    }
+    public void setPlayedGames(Integer playedGames) {
+        this.playedGames = playedGames;
+    }
+    public String getForm() {
+        return this.form == null || this.form.equals("null") ? "    -    " : this.form; // formatting it has to feet 9 characters
+    }
+    public void setForm(String form) {
+        this.form = form;
+    }
+    public Integer getGamesWon() {
+        return this.gamesWon == null ? 0 : this.gamesWon;
+    }
+    
+    public void setGamesWon(Integer gamesWon) {
+        this.gamesWon = gamesWon;
+    }
+    public Integer getGamesDrawn() {
+        return this.gamesDrawn == null ? 0 : this.gamesDrawn;
+    }
+    
+    public void setGamesDrawn(Integer gamesDrawn) {
+        this.gamesDrawn = gamesDrawn;
+    }
+    public Integer getGamesLost() {
+        return this.gamesLost == null ? 0 : this.gamesLost;
+    }
+    
+    public void setGamesLost(Integer gamesLost) {
+        this.gamesLost = gamesLost;
+    }
+
+    public Integer getPoints() {
+        return this.points == null ? 0 : this.points;
+    }
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+    public Integer getGoalsFor() {
+        return this.goalsFor == null ? 0 : this.goalsFor;
+    }
+    
+    public void setGoalsFor(Integer goalsFor) {
+        this.goalsFor = goalsFor;
+    }
+    public Integer getGoalsAgainst() {
+        return this.goalsAgainst == null ? 0 : this.goalsAgainst;
+    }
+    public void setGoalsAgainst(Integer goalsAgainst) {
+        this.goalsAgainst = goalsAgainst;
+    }
+    public Integer getGoalDifference() {
+        return this.goalDifference == null ? 0 : this.goalDifference;
+    }
+    public void setGoalDifference(Integer goalDifference) {
+        this.goalDifference = goalDifference;
+    }
+
+}
