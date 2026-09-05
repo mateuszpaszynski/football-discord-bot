@@ -1,6 +1,7 @@
 package pl.mateuszpaszynski.footballtracker.discord.command;
 
 import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -73,7 +74,18 @@ public class MatchesCommand implements BotCommand {
                 event.reply("**No more matches for today. Some matches might be already live to see them use /matches live**\n").queue();    
                 return;
             }
-            event.reply("**Today's matches**\n" + MatchFormatter.format(matches)).queue();
+            if (matches.size() > 25) {             
+                String formattedMatches1 = MatchFormatter.format(matches.subList(0, 25));
+                String formattedMatches2 = MatchFormatter.format(matches.subList(25, matches.size()));
+
+                 event.reply("**Today's matches**\n" +  formattedMatches1)
+                    .queue(v -> event.getHook().sendMessage(formattedMatches2).queue());
+
+            
+            } else {
+                event.reply("**Today's matches**\n" + MatchFormatter.format(matches)).queue();
+            }
+            
             return;
         }
         List<Team> teams = teamService.getTeam(searchPhrase);
@@ -114,7 +126,16 @@ public class MatchesCommand implements BotCommand {
                 event.reply("No matches finished in the **last 24 hours**").queue();
                 return;
             }
-            event.reply("Matches finished in the **last 24 hours** across all available competitions\n" + MatchFormatter.format(matches)).queue();
+            if (matches.size() > 25) {
+                String formattedMatches1 = MatchFormatter.format(matches.subList(0, 25));
+                String formattedMatches2 = MatchFormatter.format(matches.subList(25, matches.size()));
+
+                 event.reply("Matches finished in the **last 24 hours** across all available competitions\n" +  formattedMatches1)
+                    .queue(v -> event.getHook().sendMessage(formattedMatches2).queue());
+
+            } else {
+                event.reply("Matches finished in the **last 24 hours** across all available competitions\n" + MatchFormatter.format(matches)).queue();
+            }
             return;
         }
         List<Team> teams = teamService.getTeam(searchPhrase);
@@ -155,11 +176,17 @@ public class MatchesCommand implements BotCommand {
             event.reply("No matches are live right now 😴").queue();
             return;
         }
-        String formattedMatches = MatchFormatter.format(liveMatches);
-        if (formattedMatches.length() > 2000) {
-            formattedMatches = formattedMatches.substring(0, 1990) + "...";
+        if (liveMatches.size() > 25) {
+            String formattedMatches1 = MatchFormatter.format(liveMatches.subList(0, 25));
+            String formattedMatches2 = MatchFormatter.format(liveMatches.subList(25, liveMatches.size()));
+            event.reply("**🔴 Live matches:**\n\n" + formattedMatches1)
+                    .queue(v -> event.getHook().sendMessage(formattedMatches2 + "\n\n**Note**: Matches' scores visible here are **not** automatically refreshed, if you want to see the actual scores you have to type the command again").queue());
+
+        } else {
+            String formattedMatches = MatchFormatter.format(liveMatches);
+             event.reply("**🔴 Live matches:**\n\n" + formattedMatches + "\n\n**Note**: Matches' scores visible here are **not** automatically refreshed, if you want to see the actual scores you have to type the command again").queue();
         }
-        event.reply("**🔴 Live matches:**\n\n" + formattedMatches + "\n\n**Note**: Matches' scores visible here are **not** automatically refreshed, if you want to see the actual scores you have to type the command again").queue();
+    
     }
 
     @Override

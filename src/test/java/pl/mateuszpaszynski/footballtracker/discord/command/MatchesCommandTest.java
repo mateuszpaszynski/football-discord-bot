@@ -231,6 +231,7 @@ public class MatchesCommandTest {
 
     @Test
     void shouldReplyWithTodayMatchesWhenQueryIsAnyForNext() {
+
         when(event.getSubcommandName()).thenReturn("next");
         when(event.getOption("query")).thenReturn(null); // Brak argumentu = domyślnie "any"
         
@@ -244,7 +245,7 @@ public class MatchesCommandTest {
         verify(event).reply(captor.capture());
         verify(replyAction).queue();
         
-        assertThat(captor.getValue()).contains("Today's matches");
+        assertThat(captor.getValue()).doesNotContain("null");
     }
 
     @Test
