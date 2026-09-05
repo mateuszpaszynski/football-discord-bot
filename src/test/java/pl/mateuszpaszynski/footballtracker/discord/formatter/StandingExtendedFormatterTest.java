@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StandingFormatterTest {
+public class StandingExtendedFormatterTest {
     
     @Test
     void shouldFormatMatchesListCorrectly() {
@@ -39,7 +39,14 @@ public class StandingFormatterTest {
             .startsWith("```")
             .contains("Team")
             .contains("M")
+            .contains("W")
+            .contains("D")
+            .contains("L")
+            .contains("GF")
+            .contains("GA")
+            .contains("GD")
             .contains("Pts")
+            .contains("Last 5")
             .contains("Real Madrid")
             .doesNotContain("Real Madrid CF")
             .doesNotContain("Premier League") // we split table into two messages so we dont add header inside formatter
@@ -56,7 +63,14 @@ public class StandingFormatterTest {
             .startsWith("```")
             .contains("Team")
             .contains("M")
+            .contains("W")
+            .contains("D")
+            .contains("L")
+            .contains("GF")
+            .contains("GA")
+            .contains("GD")
             .contains("Pts")
+            .contains("Last 5")
             .doesNotContain("null");
     }
 
