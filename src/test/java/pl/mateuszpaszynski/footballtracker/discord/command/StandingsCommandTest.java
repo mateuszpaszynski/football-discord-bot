@@ -38,8 +38,11 @@ class StandingsCommandTest {
     private StandingService standingService;
     
     @Mock
-    private OptionMapping optionMapping;
+    private OptionMapping optionMappingLeague;
     
+    @Mock
+    private OptionMapping optionMappingFull;
+
     @Mock
     private SlashCommandInteractionEvent event;
     
@@ -56,7 +59,7 @@ class StandingsCommandTest {
     private StandingsCommand command;
 
     @Test
-    void shouldReplyWithFormattedStanding() {
+    void shouldReplyWithFormattedExtendedStanding() {
         Competition comp = new Competition();
         comp.setId(1L);
         comp.setCode("PL");
@@ -79,8 +82,11 @@ class StandingsCommandTest {
         standing1.setGoalsAgainst(2);
         standing1.setGoalDifference(8);
 
-        when(event.getOption(anyString())).thenReturn(optionMapping);
-        when(optionMapping.getAsString()).thenReturn("PL");
+        when(event.getOption("league")).thenReturn(optionMappingLeague);
+        when(event.getOption("full")).thenReturn(optionMappingFull);
+        when(optionMappingLeague.getAsString()).thenReturn("PL");
+        when(optionMappingFull.getAsBoolean()).thenReturn(true);
+        
         when(competitionService.getCompetition("PL")).thenReturn(comp);
         when(standingService.getStandings(comp)).thenReturn(List.of(standing1));
         when(event.reply(anyString())).thenReturn(replyAction);
@@ -128,8 +134,11 @@ class StandingsCommandTest {
             standings.add(standing1);
         }
         
-        when(event.getOption(anyString())).thenReturn(optionMapping);
-        when(optionMapping.getAsString()).thenReturn("PL");
+
+        when(event.getOption("league")).thenReturn(optionMappingLeague);
+        when(event.getOption("full")).thenReturn(optionMappingFull);
+        when(optionMappingLeague.getAsString()).thenReturn("PL");
+        when(optionMappingFull.getAsBoolean()).thenReturn(true);
         when(competitionService.getCompetition("PL")).thenReturn(comp);
         when(standingService.getStandings(comp)).thenReturn(standings);
         when(event.reply(anyString())).thenReturn(replyAction);
@@ -179,8 +188,11 @@ class StandingsCommandTest {
         comp2.setName("Primera Division");
         comp2.setCode("PD");
 
-        when(event.getOption(anyString())).thenReturn(optionMapping);
-        when(optionMapping.getAsString()).thenReturn("BB");
+
+        when(event.getOption("league")).thenReturn(optionMappingLeague);
+        when(event.getOption("full")).thenReturn(optionMappingFull);
+        when(optionMappingLeague.getAsString()).thenReturn("BB");
+
         when(competitionService.getCompetition("BB")).thenThrow(new IllegalArgumentException("League BB not found."));
         when(competitionService.getCompetitions()).thenReturn(List.of(comp1,comp2));
         

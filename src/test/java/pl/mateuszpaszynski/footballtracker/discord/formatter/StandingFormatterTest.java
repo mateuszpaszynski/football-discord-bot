@@ -2,7 +2,7 @@ package pl.mateuszpaszynski.footballtracker.discord.formatter;
 
 import org.junit.jupiter.api.Test;
 
-import pl.mateuszpaszynski.footballtracker.discord.formatter.StandingFormatter;
+import pl.mateuszpaszynski.footballtracker.discord.formatter.StandingExtendedFormatter;
 import pl.mateuszpaszynski.footballtracker.model.Competition;
 import pl.mateuszpaszynski.footballtracker.model.Standing;
 import pl.mateuszpaszynski.footballtracker.model.Team;
@@ -35,7 +35,7 @@ public class StandingFormatterTest {
         standing.setCompetition(comp1);
         standing.setTeam(team);
         List<Standing> listOfStandings = List.of(standing);
-        String result = StandingFormatter.format(listOfStandings);
+        String result = StandingExtendedFormatter.format(listOfStandings);
         
         assertThat(result)
             .startsWith("```")
@@ -59,7 +59,7 @@ public class StandingFormatterTest {
     void shouldHandleEmptyListWithoutCrashing() {
         List<Standing> emptyList = Collections.emptyList();
 
-        String result = StandingFormatter.format(emptyList);
+        String result = StandingExtendedFormatter.format(emptyList);
 
         assertThat(result)
             .startsWith("```")
