@@ -38,8 +38,11 @@ class StandingsCommandTest {
     private StandingService standingService;
     
     @Mock
-    private OptionMapping optionMapping;
+    private OptionMapping optionMappingLeague;
     
+    @Mock
+    private OptionMapping optionMappingFull;
+
     @Mock
     private SlashCommandInteractionEvent event;
     
@@ -56,6 +59,51 @@ class StandingsCommandTest {
     private StandingsCommand command;
 
     @Test
+    void shouldReplyWithFormattedExtendedStanding() {
+        Competition comp = new Competition();
+        comp.setId(1L);
+        comp.setCode("PL");
+        comp.setName("Premier League");
+
+        Team team1 = new Team();
+        team1.setId(11L);
+        team1.setName("Real Madrid");
+        
+        Standing standing1 = new Standing();
+        standing1.setCompetition(comp);
+        standing1.setTeam(team1);
+        standing1.setPosition(1);
+        standing1.setGamesWon(3);
+        standing1.setGamesLost(0);
+        standing1.setGamesDrawn(1);
+        standing1.setPoints(10);
+        standing1.setPlayedGames(4);
+        standing1.setGoalsFor(10);
+        standing1.setGoalsAgainst(2);
+        standing1.setGoalDifference(8);
+
+        when(event.getOption("league")).thenReturn(optionMappingLeague);
+        when(event.getOption("full")).thenReturn(optionMappingFull);
+        when(optionMappingLeague.getAsString()).thenReturn("PL");
+        when(optionMappingFull.getAsBoolean()).thenReturn(true);
+        
+        when(competitionService.getCompetition("PL")).thenReturn(comp);
+        when(standingService.getStandings(comp)).thenReturn(List.of(standing1));
+        when(event.reply(anyString())).thenReturn(replyAction);
+        command.execute(event);
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        verify(event).reply(captor.capture());
+        verify(replyAction).queue();
+        
+        String message = captor.getValue();
+
+        assertThat(message).contains("Premier League")
+        .contains("Real Madrid")
+        .contains("W")
+        .doesNotContain("null");
+    }
+        @Test
     void shouldReplyWithFormattedStanding() {
         Competition comp = new Competition();
         comp.setId(1L);
@@ -79,8 +127,11 @@ class StandingsCommandTest {
         standing1.setGoalsAgainst(2);
         standing1.setGoalDifference(8);
 
-        when(event.getOption(anyString())).thenReturn(optionMapping);
-        when(optionMapping.getAsString()).thenReturn("PL");
+        when(event.getOption("league")).thenReturn(optionMappingLeague);
+        when(event.getOption("full")).thenReturn(optionMappingFull);
+        when(optionMappingLeague.getAsString()).thenReturn("PL");
+        when(optionMappingFull.getAsBoolean()).thenReturn(false);
+        
         when(competitionService.getCompetition("PL")).thenReturn(comp);
         when(standingService.getStandings(comp)).thenReturn(List.of(standing1));
         when(event.reply(anyString())).thenReturn(replyAction);
@@ -94,6 +145,7 @@ class StandingsCommandTest {
 
         assertThat(message).contains("Premier League")
         .contains("Real Madrid")
+        .doesNotContain("W")
         .doesNotContain("null");
     }
 
@@ -128,8 +180,11 @@ class StandingsCommandTest {
             standings.add(standing1);
         }
         
-        when(event.getOption(anyString())).thenReturn(optionMapping);
-        when(optionMapping.getAsString()).thenReturn("PL");
+
+        when(event.getOption("league")).thenReturn(optionMappingLeague);
+        when(event.getOption("full")).thenReturn(optionMappingFull);
+        when(optionMappingLeague.getAsString()).thenReturn("PL");
+        when(optionMappingFull.getAsBoolean()).thenReturn(true);
         when(competitionService.getCompetition("PL")).thenReturn(comp);
         when(standingService.getStandings(comp)).thenReturn(standings);
         when(event.reply(anyString())).thenReturn(replyAction);
@@ -179,8 +234,11 @@ class StandingsCommandTest {
         comp2.setName("Primera Division");
         comp2.setCode("PD");
 
-        when(event.getOption(anyString())).thenReturn(optionMapping);
-        when(optionMapping.getAsString()).thenReturn("BB");
+
+        when(event.getOption("league")).thenReturn(optionMappingLeague);
+        when(event.getOption("full")).thenReturn(optionMappingFull);
+        when(optionMappingLeague.getAsString()).thenReturn("BB");
+
         when(competitionService.getCompetition("BB")).thenThrow(new IllegalArgumentException("League BB not found."));
         when(competitionService.getCompetitions()).thenReturn(List.of(comp1,comp2));
         

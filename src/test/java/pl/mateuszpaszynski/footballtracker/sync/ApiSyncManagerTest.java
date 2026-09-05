@@ -264,13 +264,12 @@ public class ApiSyncManagerTest {
     }]          
     """;
        //endregion
-       
        Competition comp = new Competition();
        comp.setId(2003L);
        comp.setName("Eredivisie");
        comp.setCode("DED");
        when(competitionService.getCompetitions()).thenReturn(List.of(comp));
-
+       when(competitionRepository.findById(2003L)).thenReturn(Optional.of(comp));
        JsonNode mockJsonNode = objectMapper.readTree(apiResponse);
        Team hTeam = new Team();
        hTeam.setId(1909L);
@@ -345,6 +344,7 @@ public class ApiSyncManagerTest {
         comp.setCode("DED");
         
         when(competitionService.getCompetitions()).thenReturn(List.of(comp));
+        
         when(footballApiClient.fetchRawFixtures("DED")).thenReturn(mockJsonNode);
         
         apiSyncManager.fetchFixtures();
