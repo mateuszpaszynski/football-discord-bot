@@ -166,7 +166,7 @@ public class ApiSyncManager {
         List<Competition> allComps = competitionService.getCompetitions();
         int updatedCount = 0;
         for (Competition competition : allComps) {
-            if (competition.getType().equals("LEAGUE")) {
+            if (competition.getType().equals("LEAGUE") || competition.getId() == 2001L) { // champions league
                 
                 rateLimitManager.apply();
                 JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
