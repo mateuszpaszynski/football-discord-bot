@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,7 +21,10 @@ import pl.mateuszpaszynski.footballtracker.repository.StandingRepository;
 import pl.mateuszpaszynski.footballtracker.repository.TeamRepository;
 import pl.mateuszpaszynski.footballtracker.service.CompetitionService;
 import pl.mateuszpaszynski.footballtracker.service.MatchService;
+import pl.mateuszpaszynski.footballtracker.event.GoalScoredEvent;
+
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Service
@@ -38,9 +42,12 @@ public class ApiSyncManager {
 
     private final RateLimitManager rateLimitManager;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     public ApiSyncManager(TeamRepository teamRepository, MatchRepository matchRepository, CompetitionRepository competitionRepository, StandingRepository standingRepository, 
-                         CompetitionService competitionService, MatchService matchService, FootballApiClient footballApiClient, RateLimitManager rateLimitManager
-    ) {
+                         CompetitionService competitionService, MatchService matchService, FootballApiClient footballApiClient, RateLimitManager rateLimitManager,
+                        ApplicationEventPublisher eventPublisher) {
+
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
         this.competitionRepository = competitionRepository;
@@ -51,6 +58,8 @@ public class ApiSyncManager {
         this.footballApiClient = footballApiClient;
 
         this.rateLimitManager = rateLimitManager;
+
+        this.eventPublisher = eventPublisher;
     }
     public void parseMatchesFromJson(JsonNode matchesNode) {
         int updatedCount = 0;
@@ -102,6 +111,8 @@ public class ApiSyncManager {
                 }
                 
                 String score = "TBD";
+                String oldScore = "";
+                Match match = matchRepository.findById(matchId).orElse(new Match());                
                 
                 if (status.equals("FINISHED") || status.equals("LIVE") || status.equals("PAUSED") || status.equals("IN_PLAY")) {
                     JsonNode scoreNode = matchJson.get("score");
@@ -111,10 +122,24 @@ public class ApiSyncManager {
                         String homeGoals = scoreNode.get("fullTime").get("home").asText();
                         String awayGoals = scoreNode.get("fullTime").get("away").asText();
                         score = homeGoals + " - " + awayGoals;
+                            
+                        oldScore = match.getScore();
+                        String[] goals = oldScore.split(" - ");
+                        if (score != oldScore) {
+                            Team scoringTeam = goals[0] == homeGoals ? awayTeam : homeTeam;
+                            eventPublisher.publishEvent(new GoalScoredEvent(match, scoringTeam, score));
+                        }
+
                     }
                 }
-                
-                Match match = new Match(matchId, competition, lastUpdated, utcDate, status, homeTeam, awayTeam, score);
+                match.setId(matchId);
+                match.setCompetition(competition);
+                match.setLastUpdated(lastUpdated);
+                match.setTime(utcDate);
+                match.setStatus(status);
+                match.setHomeTeam(homeTeam);
+                match.setAwayTeam(awayTeam);
+                match.setScore(score);    
                 matchRepository.save(match);
                 updatedCount++;
             } catch (Exception e) {
@@ -125,13 +150,16 @@ public class ApiSyncManager {
 
     }
     public void fetchFixturesForToday() {
+
         List<Match> matches = matchService.getMatchesThatShouldBeLive();
         if (matches.isEmpty()) {
             return;
         }
+        
         HashSet<String> leagueCodes = new HashSet<>();
         for (Match match : matches) {
             leagueCodes.add(match.getCompetition().getCode());
+
         }
         StringBuilder query = new StringBuilder();
         for (String leagueCode : leagueCodes) {
