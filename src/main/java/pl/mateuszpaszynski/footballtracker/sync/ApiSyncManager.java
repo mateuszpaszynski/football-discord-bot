@@ -95,8 +95,6 @@ public class ApiSyncManager {
                 Long matchId = matchJson.get("id").asLong();
                 String utcDate = matchJson.get("utcDate").asText();
                 String status = matchJson.get("status").asText();
-
-                // status sometimes arrives broken for certain leagues;
                 if (status.matches(".*\\d+.*")) {
                     status = "TIMED"; 
                 }
@@ -105,11 +103,16 @@ public class ApiSyncManager {
                 Instant now = Instant.now();
 
                 if (now.isAfter(matchTime.plus(2, ChronoUnit.HOURS))) {
-                    status = "FINISHED"; // 2hours ago probably ended
+                    status = "FINISHED"; 
                 } else if (now.isAfter(matchTime)) {
-                    status = "IN_PLAY"; // started but not enough time passed so we guess its in play
+                    status = "IN_PLAY"; 
+                } else {
+                    if (utcDate.endsWith("T00:00:00Z")) {
+                        status = "SCHEDULED";
+                    } else {
+                        status = "TIMED"; 
+                    }
                 }
-                
                 String score = "TBD";
                 String oldScore = "";
                 Match match = matchRepository.findById(matchId).orElse(new Match());                

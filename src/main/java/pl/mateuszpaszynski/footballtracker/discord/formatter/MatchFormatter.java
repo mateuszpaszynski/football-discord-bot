@@ -27,7 +27,7 @@ public class MatchFormatter {
             }
             String score = match.getScore();
             String discordTime = String.format("<t:%d:f>", unixSeconds);
-
+            String discordDay = String.format("<t:%d:d>", unixSeconds);    
             String relativeTime = String.format("<t:%d:R>", unixSeconds); 
             switch (status) {
                 case "FINISHED":
@@ -44,7 +44,7 @@ public class MatchFormatter {
                     homeTeam.getDisplayName(), 
                     awayTeam.getDisplayName(),
                     comp.getCode(), 
-                    discordTime, 
+                    discordDay, 
                     "SCHEDULED - hour **will change**"
                     ));  
                     break;
