@@ -127,12 +127,13 @@ public class ApiSyncManager {
                         score = homeGoals + " - " + awayGoals;
                             
                         oldScore = match.getScore();
-                        String[] goals = oldScore.split(" - ");
-                        if (score != oldScore) {
-                            Team scoringTeam = goals[0] == homeGoals ? awayTeam : homeTeam;
+                        if (oldScore != null && oldScore.contains("-") && !score.equals(oldScore)) {
+                            String[] oldGoals = oldScore.split(" - ");
+                        
+                            Team scoringTeam = oldGoals[0].trim().equals(homeGoals) ? match.getAwayTeam() : match.getHomeTeam();
+                            
                             eventPublisher.publishEvent(new GoalScoredEvent(match, scoringTeam, score));
                         }
-
                     }
                 }
                 match.setId(matchId);
@@ -146,7 +147,7 @@ public class ApiSyncManager {
                 matchRepository.save(match);
                 updatedCount++;
             } catch (Exception e) {
-                log.error("Discarded match: {}",e.getMessage());
+                log.error("Discarded match: {}", e.getMessage());
             }
         }
         log.info("Updated {} matches", updatedCount);

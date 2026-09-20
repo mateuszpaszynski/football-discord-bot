@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import pl.mateuszpaszynski.footballtracker.discord.formatter.MatchFormatter;
 import pl.mateuszpaszynski.footballtracker.model.Competition;
 import pl.mateuszpaszynski.footballtracker.model.Match;
 import pl.mateuszpaszynski.footballtracker.model.Team;
@@ -50,7 +49,7 @@ public class MatchFormatterTest {
         .contains("FC Barcelona")
         .contains("PD")
         .doesNotContain("Primera Division")
-        .contains("<t:1787427000:f>")
+        .contains("<t:1787427000:d>")
         .doesNotContain("2026-08-22T19:30:00Z")
         .contains("hour").contains("will").contains("change")
         .doesNotContain("null");
