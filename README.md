@@ -36,18 +36,18 @@ The bot runs 24/7 as a system service on an old laptop.
 ## Gallery
 <div align="center">
   <h3>/standings</h3>
-  <img src="appView/standings.png" width="800" alt="Admin Dashboard">
+  <img src="appView/standings.png" width="800" alt="Standings">
   <br/><br/>
   <h3>/matches live</h3>
-  <img src="appView/matches_live.png" width="800" alt="Home Page">
+  <img src="appView/matches_live.png" width="800" alt="matches_live">
   <br/><br/>
   <h3>/matches next</h3>
-  <img src="appView/matches_next.png" width="800" alt="Offer Page">
+  <img src="appView/matches_next.png" width="800" alt="matches_next">
   <br/><br/>
   <h3>/matches last</h3>
-  <img src="appView/matches_last.png" width="800" alt="User Calendar View">
+  <img src="appView/matches_last.png" width="800" alt="matches_last">
   <br/><br/>
   <h3>/competitions</h3>
-  <img src="appView/competitions.png" width="800" alt="Admin Dashboard">
+  <img src="appView/competitions.png" width="800" alt="competitions">
   
 </div>
