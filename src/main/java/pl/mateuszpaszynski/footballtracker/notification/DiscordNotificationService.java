@@ -27,7 +27,7 @@ public class DiscordNotificationService {
 
         long unixSeconds = Instant.parse(match.getTime()).getEpochSecond();
         String relativeTime = String.format("<t:%d:R>", unixSeconds); 
-        String message = String.format("----------------\n⚽ GOAL **%s** \\n🏟️ %s **%s** %s (%s) \\n⏱️ Start: %s\\n----------------",
+        String message = String.format("--------------------------------\n⚽ GOAL **%s** \n🏟️ %s **%s** %s (%s) \n⏱️ Start: %s",
                     event.scoringTeam().getDisplayName(), 
                     homeTeam.getDisplayName(),
                     event.newScore(),
