@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import lombok.extern.slf4j.Slf4j;
 import pl.mateuszpaszynski.footballtracker.client.FootballApiClient;
+import pl.mateuszpaszynski.footballtracker.event.GoalScoredEvent;
 import pl.mateuszpaszynski.footballtracker.model.Competition;
 import pl.mateuszpaszynski.footballtracker.model.Match;
 import pl.mateuszpaszynski.footballtracker.model.Standing;
@@ -21,9 +23,6 @@ import pl.mateuszpaszynski.footballtracker.repository.StandingRepository;
 import pl.mateuszpaszynski.footballtracker.repository.TeamRepository;
 import pl.mateuszpaszynski.footballtracker.service.CompetitionService;
 import pl.mateuszpaszynski.footballtracker.service.MatchService;
-import pl.mateuszpaszynski.footballtracker.event.GoalScoredEvent;
-
-import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -200,8 +199,9 @@ public class ApiSyncManager {
         for (Competition competition : allComps) {
             if (competition.getType().equals("LEAGUE") || competition.getId() == 2001L) { // champions league
                 
-                rateLimitManager.apply();
-                JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
+                rateLimitManager.apply(); 
+                try {
+                    JsonNode standingsNode = footballApiClient.fetchRawStandings(competition.getId().toString());
                 for (JsonNode standing : standingsNode) {
 
                     if (standing.get("type").asText().equals("TOTAL")) {
@@ -259,6 +259,10 @@ public class ApiSyncManager {
                     break;
                     }
                 }
+                } catch (Exception e) {
+                    log.error("One league {} discarded, reason: {}", competition.getName(), e.getMessage());
+                }
+                
             }
         }
         log.info("Updated {} standings entries", updatedCount);
